@@ -55,4 +55,12 @@ public class SubstringesTest {
 		assertEquals(")", streB.getValue());
 		assertEquals("the words", streBetween.getValue());
 	}
+
+	@Test
+	public void lineTest() {
+		List<Stringe> lines = new Stringe("Hello\nWorld!").split('\n');
+
+		assertEquals(1, lines.get(0).getLine());
+		assertEquals(2, lines.get(1).getLine());
+	}
 }
