@@ -10,7 +10,7 @@ import java.util.regex.Pattern;
  * Represents a string or a substring in relation to its parent.
  * Provides line number, column, offset and other useful data.
  */
-public class Stringe {
+public class Stringe implements CharSequence {
 	private Stref stref;
 
 	private int offset;
@@ -239,6 +239,7 @@ public class Stringe {
 	/**
 	 * The length of the string represented by the stringe.
 	 */
+	@Override
 	public int length() {
 		return length;
 	}
@@ -355,6 +356,15 @@ public class Stringe {
 
 	/**
 	 * Returns the zero-based index at which the specified string first occurs, relative to the substringe.
+	 *
+	 * @param input The string to search for.
+	 */
+	public int indexOf(String input) {
+		return getValue().indexOf(input);
+	}
+
+	/**
+	 * Returns the zero-based index at which the specified string first occurs, relative to the substringe.
 	 * The search starts at the specified index.
 	 *
 	 * @param input The string to search for.
@@ -362,6 +372,17 @@ public class Stringe {
 	 */
 	public int indexOf(String input, int start) {
 		return getValue().indexOf(input, start);
+	}
+
+	/**
+	 * Returns the zero-based index at which the specified string first occurs, relative to the parent.
+	 *
+	 * @param input The string to search for.
+	 */
+	public int indexOfTotal(String input) {
+		int index = getValue().indexOf(input);
+
+		return index == -1 ? index : index + offset;
 	}
 
 	/**
@@ -379,6 +400,15 @@ public class Stringe {
 
 	/**
 	 * Returns the zero-based index at which the specified character first occurs, relative to the substringe.
+	 *
+	 * @param input The character to search for.
+	 */
+	public int indexOf(char input) {
+		return getValue().indexOf(input);
+	}
+
+	/**
+	 * Returns the zero-based index at which the specified character first occurs, relative to the substringe.
 	 * The search starts at the specified index.
 	 *
 	 * @param input The character to search for.
@@ -390,6 +420,17 @@ public class Stringe {
 
 	/**
 	 * Returns the zero-based index at which the specified character first occurs, relative to the parent.
+	 *
+	 * @param input The character to search for.
+	 */
+	public int indexOfTotal(char input) {
+		int index = getValue().indexOf(input);
+
+		return index == -1 ? index : index + offset;
+	}
+
+	/**
+	 * Returns the zero-based index at which the specified character first occurs, relative to the parent.
 	 * The search starts at the specified index.
 	 *
 	 * @param input The character to search for.
@@ -397,6 +438,96 @@ public class Stringe {
 	 */
 	public int indexOfTotal(char input, int start) {
 		int index = getValue().indexOf(input, start);
+
+		return index == -1 ? index : index + offset;
+	}
+
+	/**
+	 * Returns the zero-based index at which the specified string last occurs, relative to the substringe.
+	 * The search starts at the specified index, and moves backwards.
+	 *
+	 * @param input The string to search for.
+	 */
+	public int lastIndexOf(String input) {
+		return getValue().lastIndexOf(input);
+	}
+
+	/**
+	 * Returns the zero-based index at which the specified string last occurs, relative to the substringe.
+	 * The search starts at the specified index, and moves backwards.
+	 *
+	 * @param input The string to search for.
+	 * @param start The index at which to begin the search.
+	 */
+	public int lastIndexOf(String input, int start) {
+		return getValue().lastIndexOf(input, start);
+	}
+
+	/**
+	 * Returns the zero-based index at which the specified string last occurs, relative to the parent.
+	 * The search starts at the specified index, and moves backwards.
+	 *
+	 * @param input The string to search for.
+	 */
+	public int lastIndexOfTotal(String input) {
+		int index = getValue().lastIndexOf(input);
+
+		return index == -1 ? index : index + offset;
+	}
+
+	/**
+	 * Returns the zero-based index at which the specified string last occurs, relative to the parent.
+	 * The search starts at the specified index, and moves backwards.
+	 *
+	 * @param input The string to search for.
+	 * @param start The index at which to begin the search.
+	 */
+	public int lastIndexOfTotal(String input, int start) {
+		int index = getValue().lastIndexOf(input, start);
+
+		return index == -1 ? index : index + offset;
+	}
+
+	/**
+	 * Returns the zero-based index at which the specified character last occurs, relative to the substringe.
+	 *
+	 * @param input The character to search for.
+	 */
+	public int lastIndexOf(char input) {
+		return getValue().lastIndexOf(input);
+	}
+
+	/**
+	 * Returns the zero-based index at which the specified character last occurs, relative to the substringe.
+	 * The search starts at the specified index, and moves backwards.
+	 *
+	 * @param input The character to search for.
+	 * @param start The index at which to begin the search.
+	 */
+	public int lastIndexOf(char input, int start) {
+		return getValue().lastIndexOf(input, start);
+	}
+
+	/**
+	 * Returns the zero-based index at which the specified character last occurs, relative to the parent.
+	 *
+	 * @param input The character to search for.
+	 */
+	public int lastIndexOfTotal(char input) {
+		int index = getValue().lastIndexOf(input);
+
+		return index == -1 ? index : index + offset;
+	}
+
+	/**
+	 * Returns the zero-based index at which the specified character last occurs, relative to the parent.
+	 * The search starts at the specified index, and moves backwards.
+	 *
+	 * @param input The character to search for.
+	 * @param start The index at which to begin the search.
+	 */
+	public int lastIndexOfTotal(char input, int start) {
+		int index = getValue().lastIndexOf(input, start);
 
 		return index == -1 ? index : index + offset;
 	}
@@ -418,6 +549,26 @@ public class Stringe {
 	 */
 	public Stringe substringe(int offset) {
 		return new Stringe(this, offset, length - offset);
+	}
+
+	/**
+	 * Returns a character sequence (as a substringe) that is a subsequence of this sequence.
+	 */
+	@Override
+	public CharSequence subSequence(int beginIndex, int endIndex) {
+		if(beginIndex < 0 || endIndex < 0) {
+			throw new IndexOutOfBoundsException("Indices cannot be negative.");
+		}
+
+		if(endIndex > length()) {
+			throw new IndexOutOfBoundsException("The end index cannot be greater than the length.");
+		}
+
+		if(beginIndex > endIndex) {
+			throw new IndexOutOfBoundsException("The begin index cannot be greater than the end index.");
+		}
+
+		return substringe(beginIndex, beginIndex + endIndex);
 	}
 
 	/**
@@ -639,7 +790,7 @@ public class Stringe {
 	}
 
 	/**
-	 * Splits the string into multiple parts by the specified delimiters.
+	 * Splits the stringe into multiple parts by the specified delimiters.
 	 *
 	 * @param separators The delimiters by which to split the stringe.
 	 * @param keepEmpty Specifies whether empty substringes should be included in the return value.
@@ -676,11 +827,76 @@ public class Stringe {
 		}
 	}
 
-	public char charAt(int index) {
+	/**
+	 * Tests if this Stringe's value starts with the specified prefix.
+	 *
+	 * @param prefix The prefix.
+	 */
+	public boolean startsWith(String prefix) {
+		return getValue().startsWith(prefix);
+	}
+
+	/**
+	 * Tests if the substring of this Stringe's value beginning at the specified index starts with the specified prefix.
+	 *
+	 * @param prefix The prefix.
+	 * @param toffset Where to begin looking in the String.
+	 */
+	public boolean startsWith(String prefix, int toffset) {
+		return getValue().startsWith(prefix, toffset);
+	}
+
+	/**
+	 * Tests if the string value of this Stringe ends with the specified suffix.
+	 *
+	 * @param suffix The suffix.
+	 */
+	public boolean endsWith(String suffix) {
+		return getValue().endsWith(suffix);
+	}
+
+	/**
+	 * Returns a copy of this Stringe with all of its characters converted to lower case.
+	 */
+	public Stringe toLowerCase() {
+		Stringe stre = new Stringe(this);
+		stre.substring = getValue().toLowerCase();
+
+		return stre;
+	}
+
+	/**
+	 * Returns a copy of this Stringe with all of its characters converted to upper case.
+	 */
+	public Stringe toUpperCase() {
+		Stringe stre = new Stringe(this);
+		stre.substring = getValue().toUpperCase();
+
+		return stre;
+	}
+
+	/**
+	 * Returns the char value at the specified index.
+	 *
+	 * @param index The index of the char value.
+	 * @throws IndexOutOfBoundsException If the index is negative or not less than the length of this Stringe.
+	 */
+	@Override
+	public char charAt(int index) throws IndexOutOfBoundsException {
 		return chareAt(index).getCharacter();
 	}
 
-	public Chare chareAt(int index) {
+	/**
+	 * Returns the Chare at the specified index.
+	 *
+	 * @param index The index of the Chare.
+	 * @throws IndexOutOfBoundsException if the index is negative or not less than the length of this Stringe.
+	 */
+	public Chare chareAt(int index) throws IndexOutOfBoundsException {
+		if(index < 0 || index > length() - 1) {
+			throw new IndexOutOfBoundsException();
+		}
+
 		if(stref.chares[index] == null) {
 			stref.chares[index] = new Chare(this, stref.string.charAt(index), index + offset);
 		}
@@ -689,7 +905,7 @@ public class Stringe {
 	}
 
 	/**
-	 * Determines whether the current stringe is equal to the specified object.
+	 * Determines whether the current Stringe is equal to the specified object.
 	 */
 	@Override
 	public boolean equals(Object obj) {
@@ -700,6 +916,24 @@ public class Stringe {
 		}
 
 		return stre == this;
+	}
+
+	/**
+	 * Compares the string value of this Stringe to another string, ignoring case considerations.
+	 *
+	 * @param str The string to compare this Stringe against.
+	 */
+	public boolean equalsIgnoreCase(String str) {
+		return getValue().equalsIgnoreCase(str);
+	}
+
+	/**
+	 * Compares the string value of this Stringe to the string value of another Stringe, ignoring case considerations.
+	 *
+	 * @param stre The Stringe to compare this Stringe against.
+	 */
+	public boolean equalsIgnoreCase(Stringe stre) {
+		return getValue().equalsIgnoreCase(stre.getValue());
 	}
 
 	/**
