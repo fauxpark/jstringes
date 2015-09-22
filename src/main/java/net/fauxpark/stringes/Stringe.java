@@ -2,6 +2,7 @@ package net.fauxpark.stringes;
 
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
 import java.util.regex.Pattern;
@@ -10,7 +11,7 @@ import java.util.regex.Pattern;
  * Represents a string or a substring in relation to its parent.
  * Provides line number, column, offset and other useful data.
  */
-public class Stringe implements CharSequence {
+public class Stringe implements CharSequence, Iterable<Chare> {
 	private Stref stref;
 
 	private int offset;
@@ -560,7 +561,7 @@ public class Stringe implements CharSequence {
 			throw new IndexOutOfBoundsException("Indices cannot be negative.");
 		}
 
-		if(endIndex > length()) {
+		if(endIndex > length) {
 			throw new IndexOutOfBoundsException("The end index cannot be greater than the length.");
 		}
 
@@ -893,7 +894,7 @@ public class Stringe implements CharSequence {
 	 * @throws IndexOutOfBoundsException if the index is negative or not less than the length of this Stringe.
 	 */
 	public Chare chareAt(int index) throws IndexOutOfBoundsException {
-		if(index < 0 || index > length() - 1) {
+		if(index < 0 || index > length - 1) {
 			throw new IndexOutOfBoundsException();
 		}
 
@@ -950,6 +951,20 @@ public class Stringe implements CharSequence {
 	@Override
 	public String toString() {
 		return getValue();
+	}
+
+	/**
+	 * Returns an iterator that iterates through the characteres in the stringe.
+	 */
+	@Override
+	public Iterator<Chare> iterator() {
+		List<Chare> chares = new ArrayList<>();
+
+		for(int i = 0; i < length; i++) {
+			chares.add(chareAt(i));
+		}
+
+		return chares.iterator();
 	}
 
 	/**
