@@ -25,38 +25,52 @@ public class Stringe implements CharSequence, Iterable<Chare> {
 	private String substring;
 
 	// Used to cache requested metadata so that we don't have a bunch of unused fields
-	private Map<String, Object> meta = null;
+	private Map<String, Object> meta;
 
 	/**
-	 * Creates a new stringe from the specified string.
+	 * Constructs a new Stringe from the specified string.
 	 *
-	 * @param value The string to turn into a stringe.
+	 * @param str The string to turn into a Stringe.
+	 * @throws IllegalArgumentException If the input string is null.
 	 */
-	public Stringe(String value) throws IllegalArgumentException {
-		if(value == null) {
-			throw new IllegalArgumentException("value is null");
+	public Stringe(String str) throws IllegalArgumentException {
+		if(str == null) {
+			throw new IllegalArgumentException("Input string cannot be null");
 		}
 
-		stref = new Stref(value);
+		stref = new Stref(str);
 		offset = 0;
-		length = value.length();
+		length = str.length();
 		line = 1;
 		column = 1;
 		substring = null;
 	}
 
-	Stringe(Stringe value) {
-		stref = value.stref;
-		offset = value.offset;
-		length = value.length;
-		line = value.line;
-		column = value.column;
-		substring = value.substring;
+	/**
+	 * Constructs a new Stringe from another Stringe.
+	 * Useful for cloning Stringes.
+	 *
+	 * @param value The Stringe to clone.
+	 */
+	Stringe(Stringe stre) {
+		stref = stre.stref;
+		offset = stre.offset;
+		length = stre.length;
+		line = stre.line;
+		column = stre.column;
+		substring = stre.substring;
 	}
 
-	private Stringe(Stringe parent, int relativeOffset, int length) {
+	/**
+	 * Constructs a new Stringe from a parent Stringe with a relative offset and a length.
+	 *
+	 * @param parent The parent Stringe to create the Stringe from.
+	 * @param relativeOffset The relative offset of the Stringe.
+	 * @param length The length of the Stringe.
+	 */
+	private Stringe(Stringe parent, int offset, int length) {
 		stref = parent.stref;
-		offset = parent.offset + relativeOffset;
+		this.offset = parent.offset + offset;
 		this.length = length;
 		substring = null;
 
@@ -65,21 +79,21 @@ public class Stringe implements CharSequence, Iterable<Chare> {
 		column = parent.column;
 
 		// If the offset is to the left, the line/col is already calculated. Fetch it from the Chare cache.
-		if(relativeOffset < 0) {
-			line = stref.chares[offset].getLine();
-			column = stref.chares[offset].getColumn();
+		if(offset < 0) {
+			line = stref.chares[this.offset].getLine();
+			column = stref.chares[this.offset].getColumn();
 
 			return;
 		}
 
 		// Do nothing if the offset is the same
-		if(relativeOffset == 0) {
+		if(offset == 0) {
 			return;
 		}
 
 		int aOffset;
 
-		for(int i = 0; i < relativeOffset; i++) {
+		for(int i = 0; i < offset; i++) {
 			aOffset = parent.offset + i;
 
 			if(stref.string.charAt(aOffset) == '\n') {
@@ -96,52 +110,48 @@ public class Stringe implements CharSequence, Iterable<Chare> {
 	}
 
 	/**
-	 * Converts the specified value into a stringe.
+	 * Converts the specified value into a Stringe.
 	 *
-	 * @param value The object to convert.
+	 * @param obj The object to convert.
 	 */
-	public static Stringe toStringe(Object value) {
-		return new Stringe(value.toString());
+	public static Stringe toStringe(Object obj) {
+		return new Stringe(obj.toString());
 	}
 
 	/**
-	 * Returns an empty stringe based on the position of another stringe.
+	 * Returns an empty Stringe based on the position of another Stringe.
 	 *
-	 * @param basis The basis stringe to get position info from.
+	 * @param basis The basis Stringe to get position info from.
 	 */
 	public static Stringe empty(Stringe basis) {
 		return new Stringe(basis, 0, 0);
 	}
 
 	/**
-	 * Indicates whether the specified stringe is null or empty.
+	 * Indicates whether the specified Stringe is null or empty.
 	 *
-	 * @param stringe The stringe to test.
+	 * @param stre The Stringe to test.
 	 */
-	public static boolean isNullOrEmpty(Stringe stringe) {
-		return stringe == null || stringe.length() == 0;
+	public static boolean isNullOrEmpty(Stringe stre) {
+		return stre == null || stre.length() == 0;
 	}
 
 	/**
-	 * Returns a stringe whose endpoints are the specified strings.
-	 * The stringes must both belong to the same parent string.
+	 * Returns a Stringe comprised of all text between and including the two specified Stringes.
+	 * The Stringes must both belong to the same parent string.
 	 *
-	 * @param a The first stringe.
-	 * @param b The second stringe.
+	 * @param a The first Stringe.
+	 * @param b The second Stringe.
 	 *
-	 * @throws IllegalArgumentException If either of the arguments are null, or if the stringes do not belong to the same parent.
+	 * @throws IllegalArgumentException If either of the arguments are null, or if the Stringes do not belong to the same parent.
 	 */
 	public static Stringe range(Stringe a, Stringe b) throws IllegalArgumentException {
-		if(a == null) {
-			throw new IllegalArgumentException("a is null");
-		}
-
-		if(b == null) {
-			throw new IllegalArgumentException("b is null");
+		if(a == null || b == null) {
+			throw new IllegalArgumentException("Input Stringes cannot be null");
 		}
 
 		if(a.stref != b.stref) {
-			throw new IllegalArgumentException("The stringes do not belong to the same parent.");
+			throw new IllegalArgumentException("The Stringes must both belong to the same parent");
 		}
 
 		if(a == b) {
@@ -180,23 +190,20 @@ public class Stringe implements CharSequence, Iterable<Chare> {
 	}
 
 	/**
-	 * Returns a stringe comprised of all text between the two specified stringes.
-	 * Returns null if the stringes are adjacent or intersected.
+	 * Returns a Stringe comprised of all text between the two specified Stringes.
+	 * Returns null if the Stringes are adjacent or intersected.
 	 *
-	 * @param a The first stringe.
-	 * @param b The second stringe.
+	 * @param a The first Stringe.
+	 * @param b The second Stringe.
+	 * @throws IllegalArgumentException If either of the arguments are null, or the Stringes do not belong to the same parent.
 	 */
 	public static Stringe between(Stringe a, Stringe b) throws IllegalArgumentException {
-		if(a == null) {
-			throw new IllegalArgumentException("a is null");
-		}
-
-		if(b == null) {
-			throw new IllegalArgumentException("b is null");
+		if(a == null || b == null) {
+			throw new IllegalArgumentException("Input Stringes cannot be null");
 		}
 
 		if(a.stref != b.stref) {
-			throw new IllegalArgumentException("The stringes do not belong to the same parent.");
+			throw new IllegalArgumentException("The Stringes must both belong to the same parent");
 		}
 
 		if(a == b) {
@@ -211,18 +218,22 @@ public class Stringe implements CharSequence, Iterable<Chare> {
 			return a;
 		}
 
+		// Right side of A intersects left side of B.
 		if(a.offset > b.offset && a.offset + a.length < b.offset + b.length) {
 			return null;
 		}
 
+		// Left side of A intersects right side of B.
 		if(a.offset < b.offset + b.length && a.offset > b.offset) {
 			return null;
 		}
 
+		// A is to the left of B.
 		if(a.offset + a.length <= b.offset) {
 			return a.substringe(a.length, b.offset - a.offset - a.length);
 		}
 
+		// B is to the left of A.
 		if(b.offset + b.length <= a.offset) {
 			return b.substringe(b.length, a.offset - b.offset - b.length);
 		}
@@ -231,14 +242,14 @@ public class Stringe implements CharSequence, Iterable<Chare> {
 	}
 
 	/**
-	 * The offset of the stringe in the string.
+	 * Returns the offset of the Stringe in the string.
 	 */
 	public int offset() {
 		return offset;
 	}
 
 	/**
-	 * The length of the string represented by the stringe.
+	 * Returns the length of the string represented by the Stringe.
 	 */
 	@Override
 	public int length() {
@@ -246,28 +257,28 @@ public class Stringe implements CharSequence, Iterable<Chare> {
 	}
 
 	/**
-	 * The 1-based line number at which the stringe begins.
+	 * Returns the 1-based line number at which the Stringe begins.
 	 */
 	public int getLine() {
 		return line;
 	}
 
 	/**
-	 * The 1-based column at which the stringe begins.
+	 * Returns the 1-based column number at which the Stringe begins.
 	 */
 	public int getColumn() {
 		return column;
 	}
 
 	/**
-	 * The index at which the stringe ends in the string.
+	 * Returns the index at which the Stringe ends in the string.
 	 */
 	public int getEnd() {
 		return offset + length;
 	}
 
 	/**
-	 * The substring value represented by the stringe. If the stringe is the parent, this will provide the original string.
+	 * Returns the substring value represented by the Stringe. If the Stringe is the parent, this will provide the original string.
 	 */
 	public String getValue() {
 		if(substring == null) {
@@ -279,15 +290,14 @@ public class Stringe implements CharSequence, Iterable<Chare> {
 	}
 
 	/**
-	 * Gets the original string from which the stringe was originally derived.
-	 * @return
+	 * Returns the original string from which the Stringe was originally derived.
 	 */
 	public String getParent() {
 		return stref.string;
 	}
 
 	/**
-	 * The number of times the current string occurs in the parent string.
+	 * Returns the number of times the current string occurs in the parent string.
 	 */
 	public int getOccurrenceCount() {
 		final String name = "occurrences";
@@ -304,7 +314,7 @@ public class Stringe implements CharSequence, Iterable<Chare> {
 	}
 
 	/**
-	 * The next index in the parent string at which the current stringe value occurs.
+	 * Returns the next index in the parent string at which the current Stringe value occurs.
 	 */
 	public int getNextIndex() {
 		final String name = "nextIndex";
@@ -320,6 +330,9 @@ public class Stringe implements CharSequence, Iterable<Chare> {
 		return nextIndex;
 	}
 
+	/**
+	 * Returns the meta information holder, creating it if necessary.
+	 */
 	private Map<String, Object> getMeta() {
 		if(meta == null) {
 			meta = new HashMap<String, Object>();
@@ -329,23 +342,23 @@ public class Stringe implements CharSequence, Iterable<Chare> {
 	}
 
 	/**
-	 * Indicates if the stringe is a substring.
+	 * Indicates if the Stringe is a substring.
 	 */
 	public boolean isSubstring() {
 		return offset > 0 || length < stref.string.length();
 	}
 
 	/**
-	 * Indicates if the stringe is empty.
+	 * Returns true if, and only if, length() is 0.
 	 */
 	public boolean isEmpty() {
 		return length == 0;
 	}
 
 	/**
-	 * Determines whether the current stringe is a substringe of the specified parent stringe.
+	 * Determines whether the current Stringe is a substringe of the specified parent Stringe.
 	 *
-	 * @param parent the parent stringe to compare to.
+	 * @param parent the parent Stringe to compare to.
 	 */
 	public boolean isSubstringeOf(Stringe parent) {
 		if(stref != parent.stref) {
@@ -360,28 +373,28 @@ public class Stringe implements CharSequence, Iterable<Chare> {
 	 *
 	 * @param input The string to search for.
 	 */
-	public int indexOf(String input) {
-		return getValue().indexOf(input);
+	public int indexOf(String str) {
+		return getValue().indexOf(str);
 	}
 
 	/**
 	 * Returns the zero-based index at which the specified string first occurs, relative to the substringe.
 	 * The search starts at the specified index.
 	 *
-	 * @param input The string to search for.
-	 * @param start The index at which to begin the search.
+	 * @param str The string to search for.
+	 * @param startIndex The index at which to begin the search.
 	 */
-	public int indexOf(String input, int start) {
-		return getValue().indexOf(input, start);
+	public int indexOf(String str, int startIndex) {
+		return getValue().indexOf(str, startIndex);
 	}
 
 	/**
 	 * Returns the zero-based index at which the specified string first occurs, relative to the parent.
 	 *
-	 * @param input The string to search for.
+	 * @param str The string to search for.
 	 */
-	public int indexOfTotal(String input) {
-		int index = getValue().indexOf(input);
+	public int indexOfTotal(String str) {
+		int index = getValue().indexOf(str);
 
 		return index == -1 ? index : index + offset;
 	}
@@ -390,11 +403,11 @@ public class Stringe implements CharSequence, Iterable<Chare> {
 	 * Returns the zero-based index at which the specified string first occurs, relative to the parent.
 	 * The search starts at the specified index.
 	 *
-	 * @param input The string to search for.
-	 * @param start The index at which to begin the search.
+	 * @param str The string to search for.
+	 * @param startIndex The index at which to begin the search.
 	 */
-	public int indexOfTotal(String input, int start) {
-		int index = getValue().indexOf(input, start);
+	public int indexOfTotal(String str, int startIndex) {
+		int index = getValue().indexOf(str, startIndex);
 
 		return index == -1 ? index : index + offset;
 	}
@@ -402,30 +415,30 @@ public class Stringe implements CharSequence, Iterable<Chare> {
 	/**
 	 * Returns the zero-based index at which the specified character first occurs, relative to the substringe.
 	 *
-	 * @param input The character to search for.
+	 * @param c The character to search for.
 	 */
-	public int indexOf(char input) {
-		return getValue().indexOf(input);
+	public int indexOf(char c) {
+		return getValue().indexOf(c);
 	}
 
 	/**
 	 * Returns the zero-based index at which the specified character first occurs, relative to the substringe.
 	 * The search starts at the specified index.
 	 *
-	 * @param input The character to search for.
-	 * @param start The index at which to begin the search.
+	 * @param c The character to search for.
+	 * @param startIndex The index at which to begin the search.
 	 */
-	public int indexOf(char input, int start) {
-		return getValue().indexOf(input, start);
+	public int indexOf(char c, int startIndex) {
+		return getValue().indexOf(c, startIndex);
 	}
 
 	/**
 	 * Returns the zero-based index at which the specified character first occurs, relative to the parent.
 	 *
-	 * @param input The character to search for.
+	 * @param c The character to search for.
 	 */
-	public int indexOfTotal(char input) {
-		int index = getValue().indexOf(input);
+	public int indexOfTotal(char c) {
+		int index = getValue().indexOf(c);
 
 		return index == -1 ? index : index + offset;
 	}
@@ -434,11 +447,11 @@ public class Stringe implements CharSequence, Iterable<Chare> {
 	 * Returns the zero-based index at which the specified character first occurs, relative to the parent.
 	 * The search starts at the specified index.
 	 *
-	 * @param input The character to search for.
-	 * @param start The index at which to begin the search.
+	 * @param c The character to search for.
+	 * @param startIndex The index at which to begin the search.
 	 */
-	public int indexOfTotal(char input, int start) {
-		int index = getValue().indexOf(input, start);
+	public int indexOfTotal(char c, int startIndex) {
+		int index = getValue().indexOf(c, startIndex);
 
 		return index == -1 ? index : index + offset;
 	}
@@ -447,31 +460,31 @@ public class Stringe implements CharSequence, Iterable<Chare> {
 	 * Returns the zero-based index at which the specified string last occurs, relative to the substringe.
 	 * The search starts at the specified index, and moves backwards.
 	 *
-	 * @param input The string to search for.
+	 * @param str The string to search for.
 	 */
-	public int lastIndexOf(String input) {
-		return getValue().lastIndexOf(input);
+	public int lastIndexOf(String str) {
+		return getValue().lastIndexOf(str);
 	}
 
 	/**
 	 * Returns the zero-based index at which the specified string last occurs, relative to the substringe.
 	 * The search starts at the specified index, and moves backwards.
 	 *
-	 * @param input The string to search for.
-	 * @param start The index at which to begin the search.
+	 * @param str The string to search for.
+	 * @param endIndex The index at which to begin the search.
 	 */
-	public int lastIndexOf(String input, int start) {
-		return getValue().lastIndexOf(input, start);
+	public int lastIndexOf(String str, int endIndex) {
+		return getValue().lastIndexOf(str, endIndex);
 	}
 
 	/**
 	 * Returns the zero-based index at which the specified string last occurs, relative to the parent.
 	 * The search starts at the specified index, and moves backwards.
 	 *
-	 * @param input The string to search for.
+	 * @param str The string to search for.
 	 */
-	public int lastIndexOfTotal(String input) {
-		int index = getValue().lastIndexOf(input);
+	public int lastIndexOfTotal(String str) {
+		int index = getValue().lastIndexOf(str);
 
 		return index == -1 ? index : index + offset;
 	}
@@ -480,11 +493,11 @@ public class Stringe implements CharSequence, Iterable<Chare> {
 	 * Returns the zero-based index at which the specified string last occurs, relative to the parent.
 	 * The search starts at the specified index, and moves backwards.
 	 *
-	 * @param input The string to search for.
-	 * @param start The index at which to begin the search.
+	 * @param str The string to search for.
+	 * @param endIndex The index at which to begin the search.
 	 */
-	public int lastIndexOfTotal(String input, int start) {
-		int index = getValue().lastIndexOf(input, start);
+	public int lastIndexOfTotal(String str, int endIndex) {
+		int index = getValue().lastIndexOf(str, endIndex);
 
 		return index == -1 ? index : index + offset;
 	}
@@ -492,30 +505,30 @@ public class Stringe implements CharSequence, Iterable<Chare> {
 	/**
 	 * Returns the zero-based index at which the specified character last occurs, relative to the substringe.
 	 *
-	 * @param input The character to search for.
+	 * @param c The character to search for.
 	 */
-	public int lastIndexOf(char input) {
-		return getValue().lastIndexOf(input);
+	public int lastIndexOf(char c) {
+		return getValue().lastIndexOf(c);
 	}
 
 	/**
 	 * Returns the zero-based index at which the specified character last occurs, relative to the substringe.
 	 * The search starts at the specified index, and moves backwards.
 	 *
-	 * @param input The character to search for.
-	 * @param start The index at which to begin the search.
+	 * @param c The character to search for.
+	 * @param endIndex The index at which to begin the search.
 	 */
-	public int lastIndexOf(char input, int start) {
-		return getValue().lastIndexOf(input, start);
+	public int lastIndexOf(char c, int endIndex) {
+		return getValue().lastIndexOf(c, endIndex);
 	}
 
 	/**
 	 * Returns the zero-based index at which the specified character last occurs, relative to the parent.
 	 *
-	 * @param input The character to search for.
+	 * @param c The character to search for.
 	 */
-	public int lastIndexOfTotal(char input) {
-		int index = getValue().lastIndexOf(input);
+	public int lastIndexOfTotal(char c) {
+		int index = getValue().lastIndexOf(c);
 
 		return index == -1 ? index : index + offset;
 	}
@@ -524,17 +537,17 @@ public class Stringe implements CharSequence, Iterable<Chare> {
 	 * Returns the zero-based index at which the specified character last occurs, relative to the parent.
 	 * The search starts at the specified index, and moves backwards.
 	 *
-	 * @param input The character to search for.
-	 * @param start The index at which to begin the search.
+	 * @param c The character to search for.
+	 * @param endIndex The index at which to begin the search.
 	 */
-	public int lastIndexOfTotal(char input, int start) {
-		int index = getValue().lastIndexOf(input, start);
+	public int lastIndexOfTotal(char c, int endIndex) {
+		int index = getValue().lastIndexOf(c, endIndex);
 
 		return index == -1 ? index : index + offset;
 	}
 
 	/**
-	 * Creates a substringe from the stringe, starting at the specified index and extending for the specified length.
+	 * Creates a substringe from the Stringe, starting at the specified index and extending for the specified length.
 	 *
 	 * @param offset The offset at which to begin the substringe.
 	 * @param length The length of the substringe.
@@ -544,7 +557,7 @@ public class Stringe implements CharSequence, Iterable<Chare> {
 	}
 
 	/**
-	 * Creates a substringe from the stringe, starting at  the specified index and extending to the end.
+	 * Creates a substringe from the Stringe, starting at the specified index and extending to the end.
 	 *
 	 * @param offset The offset at which to begin the substringe.
 	 */
@@ -553,45 +566,52 @@ public class Stringe implements CharSequence, Iterable<Chare> {
 	}
 
 	/**
-	 * Returns a character sequence (as a substringe) that is a subsequence of this sequence.
+	 * Returns a Stringe that is a subsequence of this sequence.
+	 *
+	 * @param startIndex The index to start the subsequence from.
+	 * @param endIndex The index to end the subsequence at.
+	 * @throws StringIndexOutOfBoundsException If start or end are negative, if end is greater than length(), or if start is greater than end.
 	 */
 	@Override
-	public CharSequence subSequence(int beginIndex, int endIndex) {
-		if(beginIndex < 0 || endIndex < 0) {
-			throw new IndexOutOfBoundsException("Indices cannot be negative.");
+	public Stringe subSequence(int startIndex, int endIndex) throws StringIndexOutOfBoundsException {
+		if(startIndex < 0 || endIndex < 0) {
+			throw new StringIndexOutOfBoundsException("Indices cannot be negative");
 		}
 
-		if(endIndex > length) {
-			throw new IndexOutOfBoundsException("The end index cannot be greater than the length.");
+		if(startIndex >= length || endIndex >= length) {
+			throw new StringIndexOutOfBoundsException("Indices must be within Stringe boundaries");
 		}
 
-		if(beginIndex > endIndex) {
-			throw new IndexOutOfBoundsException("The begin index cannot be greater than the end index.");
+		if(startIndex > endIndex) {
+			throw new StringIndexOutOfBoundsException("The begin index cannot be greater than the end index");
 		}
 
-		return substringe(beginIndex, beginIndex + endIndex);
+		return substringe(startIndex, startIndex + endIndex);
 	}
 
 	/**
-	 * Returns a substringe that contains all characters between the two specified positions in the stringe.
+	 * Returns a substringe that contains all characters between the two specified positions in the Stringe.
 	 *
 	 * @param a The left side of the slice.
 	 * @param b The right side of the slice.
+	 *
+	 * @throws IllegalArgumentException If either of the arguments are null.
+	 * @throws StringIndexOutOfBoundsException If either of the arguments are negative, or greater than the length of the Stringe.
 	 */
-	public Stringe slice(int a, int b) throws IllegalArgumentException, IndexOutOfBoundsException {
-		if(b < a) {
-			throw new IllegalArgumentException("'b' cannot be less than 'a'.");
+	public Stringe slice(int left, int right) throws IllegalArgumentException, StringIndexOutOfBoundsException {
+		if(right < left) {
+			throw new IllegalArgumentException("Right side of the slice cannot be less than the left side");
 		}
 
-		if(b < 0 || a < 0) {
-			throw new IllegalArgumentException("Indices cannot be negative.");
+		if(left < 0 || right < 0) {
+			throw new StringIndexOutOfBoundsException("Indices cannot be negative");
 		}
 
-		if(a > length || b > length) {
-			throw new IndexOutOfBoundsException("Indices must be within stringe boundaries.");
+		if(left > length || right > length) {
+			throw new StringIndexOutOfBoundsException("Indices must be within Stringe boundaries");
 		}
 
-		return new Stringe(this, a, b - a);
+		return new Stringe(this, left, right - left);
 	}
 
 	/**
@@ -599,29 +619,31 @@ public class Stringe implements CharSequence, Iterable<Chare> {
 	 *
 	 * @param left The amount, in characters, to offset the left boundary to the left.
 	 * @param right The amount, in characters, to offset the right boundary to the right.
+	 *
+	 * @throws StringIndexOutOfBoundsException If the new length is negative or the Stringe is expanded beyond the ends of the string.
 	 */
-	public Stringe dilate(int left, int right) throws IllegalArgumentException, IndexOutOfBoundsException {
-		int exIndex = offset - left;
+	public Stringe dilate(int left, int right) throws IllegalArgumentException, StringIndexOutOfBoundsException {
+		int exOffset = offset - left;
 
-		if(exIndex < 0) {
-			throw new IllegalArgumentException("Expanded offset was negative.");
+		if(exOffset < 0) {
+			throw new StringIndexOutOfBoundsException("Expanded offset cannot be negative");
 		}
 
 		int exLength = length + right + left;
 
 		if(exLength < 0) {
-			throw new IllegalArgumentException("Expanded length was negative.");
+			throw new StringIndexOutOfBoundsException("Expanded length cannot be negative");
 		}
 
-		if(exIndex + exLength > stref.string.length()) {
-			throw new IndexOutOfBoundsException("Expanded stringe tried to extend beyond the end of the string.");
+		if(exOffset + exLength > stref.string.length()) {
+			throw new StringIndexOutOfBoundsException("Tried to extend beyond the end of the string");
 		}
 
 		return new Stringe(this, -left, exLength);
 	}
 
 	/**
-	 * Returns the stringe with all leading and trailing white space characters removed.
+	 * Returns the Stringe with any leading and trailing white space removed.
 	 */
 	public Stringe trim() {
 		if(length == 0) {
@@ -646,9 +668,9 @@ public class Stringe implements CharSequence, Iterable<Chare> {
 	}
 
 	/**
-	 * Returns the stringe with any occurrences of the specified characters stripped from the ends.
+	 * Returns the Stringe with any leading and trailing occurrences of the specified characters removed.
 	 *
-	 * @param trimChars The characters to strip off the ends of the stringe.
+	 * @param trimChars The characters to remove.
 	 */
 	public Stringe trim(char... trimChars) {
 		if(length == 0) {
@@ -674,7 +696,7 @@ public class Stringe implements CharSequence, Iterable<Chare> {
 	}
 
 	/**
-	 * Returns a copy of the stringe with the specified characters removed from the start.
+	 * Returns the Stringe with any leading occurrences of the specified characters removed.
 	 *
 	 * @param trimChars The characters to remove.
 	 */
@@ -699,7 +721,7 @@ public class Stringe implements CharSequence, Iterable<Chare> {
 	}
 
 	/**
-	 * Returns a copy of the stringe with the specified characters removed from the end.
+	 * Returns the Stringe with any trailing occurrences of the specified characters removed.
 	 *
 	 * @param trimChars The characters to remove.
 	 */
@@ -724,7 +746,7 @@ public class Stringe implements CharSequence, Iterable<Chare> {
 	}
 
 	/**
-	 * Indicates whether the left side of the line on which the stringe exists is composed entirely of white space.
+	 * Indicates whether the left side of the line on which the Stringe exists is composed entirely of white space.
 	 */
 	public boolean isLeftPadded() {
 		if(offset == 0) {
@@ -751,7 +773,7 @@ public class Stringe implements CharSequence, Iterable<Chare> {
 	}
 
 	/**
-	 * Indicates whether the line context to the right side of the stringe is composed of uninterrupted white space.
+	 * Indicates whether the right side of the line on which the Stringe exists is composed entirely of white space.
 	 */
 	public boolean isRightPadded() {
 		boolean found = false;
@@ -782,18 +804,18 @@ public class Stringe implements CharSequence, Iterable<Chare> {
 	}
 
 	/**
-	 * Splits the stringe into multiple parts by the specified delimiters.
+	 * Splits the Stringe into multiple parts by the specified delimiters.
 	 *
-	 * @param separators The delimiters by which to split the stringe.
+	 * @param separators The delimiters by which to split the Stringe.
 	 */
 	public List<Stringe> split(char... separators) {
 		return split(separators, true);
 	}
 
 	/**
-	 * Splits the stringe into multiple parts by the specified delimiters.
+	 * Splits the Stringe into multiple parts by the specified delimiters.
 	 *
-	 * @param separators The delimiters by which to split the stringe.
+	 * @param separators The delimiters by which to split the Stringe.
 	 * @param keepEmpty Specifies whether empty substringes should be included in the return value.
 	 */
 	public List<Stringe> split(char[] separators, boolean keepEmpty) {
@@ -841,7 +863,7 @@ public class Stringe implements CharSequence, Iterable<Chare> {
 	 * Tests if the substring of this Stringe's value beginning at the specified index starts with the specified prefix.
 	 *
 	 * @param prefix The prefix.
-	 * @param toffset Where to begin looking in the String.
+	 * @param toffset Where to begin looking in the string.
 	 */
 	public boolean startsWith(String prefix, int toffset) {
 		return getValue().startsWith(prefix, toffset);
@@ -880,10 +902,10 @@ public class Stringe implements CharSequence, Iterable<Chare> {
 	 * Returns the char value at the specified index.
 	 *
 	 * @param index The index of the char value.
-	 * @throws IndexOutOfBoundsException If the index is negative or not less than the length of this Stringe.
+	 * @throws StringIndexOutOfBoundsException If the index is negative or not less than the length of this Stringe.
 	 */
 	@Override
-	public char charAt(int index) throws IndexOutOfBoundsException {
+	public char charAt(int index) throws StringIndexOutOfBoundsException {
 		return chareAt(index).getCharacter();
 	}
 
@@ -891,11 +913,11 @@ public class Stringe implements CharSequence, Iterable<Chare> {
 	 * Returns the Chare at the specified index.
 	 *
 	 * @param index The index of the Chare.
-	 * @throws IndexOutOfBoundsException if the index is negative or not less than the length of this Stringe.
+	 * @throws StringIndexOutOfBoundsException If the index is negative or not less than the length of this Stringe.
 	 */
-	public Chare chareAt(int index) throws IndexOutOfBoundsException {
-		if(index < 0 || index > length - 1) {
-			throw new IndexOutOfBoundsException();
+	public Chare chareAt(int index) throws StringIndexOutOfBoundsException {
+		if(index < 0 || index >= length) {
+			throw new StringIndexOutOfBoundsException(index);
 		}
 
 		if(stref.chares[index] == null) {
@@ -938,7 +960,7 @@ public class Stringe implements CharSequence, Iterable<Chare> {
 	}
 
 	/**
-	 * Returns the hash of the current stringe.
+	 * Returns the hash of the current Stringe.
 	 */
 	@Override
 	public int hashCode() {
@@ -946,7 +968,7 @@ public class Stringe implements CharSequence, Iterable<Chare> {
 	}
 
 	/**
-	 * Returns the string value of the stringe.
+	 * Returns the string value of the Stringe.
 	 */
 	@Override
 	public String toString() {
@@ -954,7 +976,7 @@ public class Stringe implements CharSequence, Iterable<Chare> {
 	}
 
 	/**
-	 * Returns an iterator that iterates through the characteres in the stringe.
+	 * Returns an iterator that iterates through the Chares in the Stringe.
 	 */
 	@Override
 	public Iterator<Chare> iterator() {
@@ -971,12 +993,26 @@ public class Stringe implements CharSequence, Iterable<Chare> {
 	 * Stores cached character data for a Stringe.
 	 */
 	private class Stref {
+		/**
+		 * The underlying String value.
+		 */
 		public final String string;
 
+		/**
+		 * An array of Chares representing each character in the string.
+		 */
 		public final Chare[] chares;
 
+		/**
+		 * An array for keeping track of non-combining characters.
+		 */
 		public final boolean[] bases;
 
+		/**
+		 * Creates a new Stref instance and populates the Chare and base arrays.
+		 *
+		 * @param str The underlying String object to set.
+		 */
 		public Stref(String str) {
 			string = str;
 			chares = new Chare[str.length()];

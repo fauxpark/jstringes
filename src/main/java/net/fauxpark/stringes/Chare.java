@@ -1,13 +1,13 @@
 package net.fauxpark.stringes;
 
 /**
- * Represents a charactere, which provides location information on a character taken from a stringe.
+ * Represents a Chare, which provides location information on a character taken from a Stringe.
  */
 public final class Chare {
 	/**
-	 * The stringe from which the charactere was taken.
+	 * The Stringe from which the Charactere was taken.
 	 */
-	private final Stringe src;
+	private final Stringe source;
 
 	/**
 	 * The underlying character.
@@ -15,32 +15,76 @@ public final class Chare {
 	private final char character;
 
 	/**
-	 * The position of the charactere in the stringe.
+	 * The position of the Chare in the Stringe.
 	 */
 	private final int offset;
 
 	/**
-	 * The line on which the charactere appears.
+	 * The line on which the Chare appears.
 	 */
 	private int line;
 
 	/**
-	 * The column on which the charactere appears.
+	 * The column on which the Chare appears.
 	 */
 	private int column;
 
-	public Stringe getSource() {
-		return src;
+	/**
+	 * Constructs a new Chare with offset information.
+	 *
+	 * @param source The source Stringe this Chare was taken from.
+	 * @param c The char value of the Chare.
+	 * @param offset The offset of the Chare relative to the Stringe.
+	 */
+	Chare(Stringe source, char c, int offset) {
+		this.source = source;
+		character = c;
+		this.offset = offset;
+		line = 0;
+		column = 0;
 	}
 
+	/**
+	 * Constructs a new Chare with offset, line and column information.
+	 *
+	 * @param source The source Stringe this Chare was taken from.
+	 * @param c The char value of the Chare.
+	 * @param offset The offset of the Chare relative to the Stringe.
+	 * @param line The 1-based line number in the Stringe.
+	 * @param column The 1-based column number in the Stringe.
+	 */
+	Chare(Stringe source, char c, int offset, int line, int column) {
+		this.source = source;
+		character = c;
+		this.offset = offset;
+		this.line = line;
+		this.column = column;
+	}
+
+	/**
+	 * Returns the Chare's source Stringe.
+	 */
+	public Stringe getSource() {
+		return source;
+	}
+
+	/**
+	 * Returns the Chare's underlying character.
+	 */
 	public char getCharacter() {
 		return character;
 	}
 
+	/**
+	 * Returns the offset of the Chare relative to its source Stringe.
+	 */
 	public int getOffset() {
 		return offset;
 	}
 
+	/**
+	 * Returns the 1-based line number of the Chare.
+	 */
 	public int getLine() {
 		if(line == 0) {
 			setLineCol();
@@ -49,6 +93,9 @@ public final class Chare {
 		return line;
 	}
 
+	/**
+	 * Returns the 1-based column number of the Chare.
+	 */
 	public int getColumn() {
 		if(column == 0) {
 			setLineCol();
@@ -57,42 +104,29 @@ public final class Chare {
 		return column;
 	}
 
+	/**
+	 * Sets line and column information for the Chare.
+	 */
 	private void setLineCol() {
-		line = src.getLine();
-		column = src.getColumn();
+		line = source.getLine();
+		column = source.getColumn();
 
 		if(offset <= 0) {
 			return;
 		}
 
 		for(int i = 0; i < offset; i++) {
-			if(src.getParent().charAt(offset) == '\n') {
+			if(source.getParent().charAt(offset) == '\n') {
 				line++;
 				column = 1;
 			} else {
-				column ++;
+				column++;
 			}
 		}
 	}
 
-	Chare(Stringe source, char c, int offset) {
-		src = source;
-		character = c;
-		this.offset = offset;
-		line = 0;
-		column = 0;
-	}
-
-	Chare(Stringe source, char c, int offset, int line, int column) {
-		src = source;
-		character = c;
-		this.offset = offset;
-		this.line = line;
-		this.column = column;
-	}
-
 	/**
-	 * Returns the string representation of the current charactere.
+	 * Returns the string representation of the current Chare.
 	 */
 	@Override
 	public String toString() {

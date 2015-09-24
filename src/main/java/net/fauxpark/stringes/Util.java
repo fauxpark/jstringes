@@ -1,10 +1,22 @@
 package net.fauxpark.stringes;
 
 public class Util {
+	/**
+	 * Calculates an aggregated hash code from the specified objects.
+	 *
+	 * @param objects The objects to hash.
+	 * @throws UnsupportedOperationException
+	 */
 	public static int hashOf(Object... objects) throws UnsupportedOperationException {
 		throw new UnsupportedOperationException("Not yet implemented");
 	}
 
+	/**
+	 * Counts the number of times a substring occurs in a parent string.
+	 *
+	 * @param parent The parent string to search.
+	 * @param sub The substring to look for.
+	 */
 	public static int getMatchCount(String parent, String sub) {
 		if(parent == null || sub == null) {
 			return 0;
@@ -32,6 +44,12 @@ public class Util {
 		return count;
 	}
 
+	/**
+	 * Determines whether the specified character is present in the given character array.
+	 *
+	 * @param array The array to search.
+	 * @param key The character to look for.
+	 */
 	public static boolean contains(final char[] array, final char key) {
 		for(final char c : array) {
 			if(c == key) {
@@ -42,6 +60,12 @@ public class Util {
 		return false;
 	}
 
+	/**
+	 * Determines whether the specified string is present in the given string array.
+	 *
+	 * @param array The array to search.
+	 * @param key The string to look for.
+	 */
 	public static boolean contains(final String[] array, final String key) {
 		for(final String str : array) {
 			if(str == key) {
