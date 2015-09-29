@@ -816,6 +816,15 @@ public class Stringe implements CharSequence, Iterable<Chare> {
 	 * Splits the Stringe into multiple parts by the specified delimiters.
 	 *
 	 * @param separators The delimiters by which to split the Stringe.
+	 */
+	public List<Stringe> split(String... separators) {
+		return split(separators, true);
+	}
+
+	/**
+	 * Splits the Stringe into multiple parts by the specified delimiters.
+	 *
+	 * @param separators The delimiters by which to split the Stringe.
 	 * @param keepEmpty Specifies whether empty substringes should be included in the return value.
 	 */
 	public List<Stringe> split(char[] separators, boolean keepEmpty) {
@@ -848,6 +857,174 @@ public class Stringe implements CharSequence, Iterable<Chare> {
 		} else {
 			return null;
 		}
+	}
+
+	/**
+	 * Splits the Stringe into multiple parts by the specified delimiters.
+	 *
+	 * @param separators The delimiters by which to split the Stringe.
+	 * @param keepEmpty Specifies whether empty substringes should be included in the return value.
+	 */
+	public List<Stringe> split(String[] separators, boolean keepEmpty) {
+		int start = 0;
+		List<Stringe> streList = new ArrayList<>();
+
+		for(int i = 0; i < length; i++) {
+			String hit = null;
+
+			for(String sep : separators) {
+				if(indexOf(sep) == i) {
+					hit = sep;
+
+					break;
+				}
+			}
+
+			if(hit == null) {
+				continue;
+			}
+
+			if(keepEmpty || i - start > 0) {
+				streList.add(substringe(start, i - start));
+			}
+
+			start = i + hit.length();
+		}
+
+		if(start > length) {
+			return streList;
+		}
+
+		if(keepEmpty || length - start > 0) {
+			streList.add(substringe(start, length - start));
+		}
+
+		return streList;
+	}
+
+	/**
+	 * Splits the Stringe into multiple parts by the specified delimiters.
+	 *
+	 * @param separators The delimiters by which to split the Stringe.
+	 * @param count The maximum number of substringes to return. If the count exceeds this number, the last item will be the remainder of the Stringe.
+	 * @param keepEmpty Specifies whether empty substringes should be included in the return value.
+	 */
+	public List<Stringe> split(char[] separators, int count, boolean keepEmpty) {
+		if(count == 0) {
+			return null;
+		}
+
+		List<Stringe> streList = new ArrayList<>();
+
+		if(count == 1) {
+			streList.add(this);
+
+			return streList;
+		}
+
+		int matches = 0;
+		int start = 0;
+		String value = getValue();
+
+		for(int i = 0; i < length; i++) {
+			if(Util.contains(separators, value.charAt(i))) {
+				if(keepEmpty || i - start > 0) {
+					streList.add(substringe(start, i - start));
+				}
+
+				start = i + 1;
+				matches++;
+			}
+
+			if(matches < count - 1) {
+				continue;
+			}
+
+			if(start > length) {
+				return streList;
+			}
+
+			streList.add(substringe(start, length - start));
+
+			return streList;
+		}
+
+		if(start > length || matches >= count) {
+			return streList;
+		}
+
+		if(keepEmpty || length - start > 0) {
+			streList.add(substringe(start, length - start));
+		}
+
+		return streList;
+	}
+
+	/**
+	 * Splits the Stringe into multiple parts by the specified delimiters.
+	 *
+	 * @param separators The delimiters by which to split the Stringe.
+	 * @param count The maximum number of substringes to return. If the count exceeds this number, the last item will be the remainder of the Stringe.
+	 * @param keepEmpty Specifies whether empty substringes should be included in the return value.
+	 */
+	public List<Stringe> split(String[] separators, int count, boolean keepEmpty) {
+		if(count == 0) {
+			return null;
+		}
+
+		List<Stringe> streList = new ArrayList<>();
+
+		if(count == 1) {
+			streList.add(this);
+
+			return streList;
+		}
+
+		int matches = 0;
+		int start = 0;
+
+		for(int i = 0; i < length; i++) {
+			String hit = null;
+
+			for(String sep : separators) {
+				if(indexOf(sep) == i) {
+					hit = sep;
+
+					break;
+				}
+			}
+
+			if(hit != null) {
+				if(keepEmpty || i - start > 0) {
+					streList.add(substringe(start, i - start));
+				}
+
+				start = i + hit.length();
+				matches++;
+			}
+
+			if(matches < count - 1) {
+				continue;
+			}
+
+			if(start > length) {
+				return streList;
+			}
+
+			streList.add(substringe(start, length - start));
+
+			return streList;
+		}
+
+		if(start > length || matches >= count) {
+			return streList;
+		}
+
+		if(keepEmpty || length - start > 0) {
+			streList.add(substringe(start, length - start));
+		}
+
+		return streList;
 	}
 
 	/**

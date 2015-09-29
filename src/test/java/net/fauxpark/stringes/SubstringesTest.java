@@ -9,7 +9,7 @@ import org.junit.Test;
 
 public class SubstringesTest {
 	@Test
-	public void twoLineSplit() {
+	public void twoLineSplitByChar() {
 		List<Stringe> splitList = Stringe.toStringe("Hello\nWorld").split('\n');
 		Stringe[] split = splitList.toArray(new Stringe[splitList.size()]);
 
@@ -25,6 +25,30 @@ public class SubstringesTest {
 		assertEquals("", split[1].getValue());
 
 		splitList = Stringe.toStringe("\nB").split('\n');
+		split = splitList.toArray(new Stringe[splitList.size()]);
+
+		assertTrue(split.length == 2);
+		assertEquals("", split[0].getValue());
+		assertEquals("B", split[1].getValue());
+	}
+
+	@Test
+	public void twoLineSplitByString() {
+		List<Stringe> splitList = Stringe.toStringe("HellostrWorld").split("str");
+		Stringe[] split = splitList.toArray(new Stringe[splitList.size()]);
+
+		assertTrue(split.length == 2);
+		assertEquals("Hello", split[0].getValue());
+		assertEquals("World", split[1].getValue());
+
+		splitList = Stringe.toStringe("Astr").split("str");
+		split = splitList.toArray(new Stringe[splitList.size()]);
+
+		assertTrue(split.length == 2);
+		assertEquals("A", split[0].getValue());
+		assertEquals("", split[1].getValue());
+
+		splitList = Stringe.toStringe("strB").split("str");
 		split = splitList.toArray(new Stringe[splitList.size()]);
 
 		assertTrue(split.length == 2);
