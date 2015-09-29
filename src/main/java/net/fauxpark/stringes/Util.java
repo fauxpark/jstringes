@@ -1,14 +1,15 @@
 package net.fauxpark.stringes;
 
+import java.util.Arrays;
+
 public class Util {
 	/**
 	 * Calculates an aggregated hash code from the specified objects.
 	 *
 	 * @param objects The objects to hash.
-	 * @throws UnsupportedOperationException
 	 */
-	public static int hashOf(Object... objects) throws UnsupportedOperationException {
-		throw new UnsupportedOperationException("Not yet implemented");
+	public static int hashOf(Object... objects) {
+		return Arrays.stream(objects).map(o -> o.hashCode()).reduce((hash, next) -> hash * 31 + next).get();
 	}
 
 	/**
