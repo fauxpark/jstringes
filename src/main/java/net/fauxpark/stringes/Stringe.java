@@ -50,7 +50,7 @@ public class Stringe implements CharSequence, Iterable<Chare> {
 	 * Constructs a new Stringe from another Stringe.
 	 * Useful for cloning Stringes.
 	 *
-	 * @param value The Stringe to clone.
+	 * @param stre The Stringe to clone.
 	 */
 	Stringe(Stringe stre) {
 		stref = stre.stref;
@@ -65,7 +65,7 @@ public class Stringe implements CharSequence, Iterable<Chare> {
 	 * Constructs a new Stringe from a parent Stringe with a relative offset and a length.
 	 *
 	 * @param parent The parent Stringe to create the Stringe from.
-	 * @param relativeOffset The relative offset of the Stringe.
+	 * @param offset The relative offset of the Stringe.
 	 * @param length The length of the Stringe.
 	 */
 	private Stringe(Stringe parent, int offset, int length) {
@@ -371,7 +371,7 @@ public class Stringe implements CharSequence, Iterable<Chare> {
 	/**
 	 * Returns the zero-based index at which the specified string first occurs, relative to the substringe.
 	 *
-	 * @param input The string to search for.
+	 * @param str The string to search for.
 	 */
 	public int indexOf(String str) {
 		return getValue().indexOf(str);
@@ -592,8 +592,8 @@ public class Stringe implements CharSequence, Iterable<Chare> {
 	/**
 	 * Returns a substringe that contains all characters between the two specified positions in the Stringe.
 	 *
-	 * @param a The left side of the slice.
-	 * @param b The right side of the slice.
+	 * @param left The left side of the slice.
+	 * @param right The right side of the slice.
 	 *
 	 * @throws IllegalArgumentException If either of the arguments are null.
 	 * @throws StringIndexOutOfBoundsException If either of the arguments are negative, or greater than the length of the Stringe.
