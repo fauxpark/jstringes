@@ -12,19 +12,40 @@ import java.util.regex.Pattern;
  * Provides line number, column, offset and other useful data.
  */
 public class Stringe implements CharSequence, Iterable<Chare> {
+	/**
+	 * Cached Chare data for the Stringe.
+	 */
 	private Stref stref;
 
+	/**
+	 * The offset of the stringe, relative to its parent string.
+	 * If the Stringe has no parent, the offset is 0.
+	 */
 	private int offset;
 
+	/**
+	 * The length of the Stringe.
+	 */
 	private int length;
 
+	/**
+	 * The 1-based line number at which the Stringe begins.
+	 */
 	private int line;
 
+	/**
+	 * The 1-based column number at which the Stringe begins.
+	 */
 	private int column;
 
+	/**
+	 * The substring represented by the Stringe.
+	 */
 	private String substring;
 
-	// Used to cache requested metadata so that we don't have a bunch of unused fields
+	/**
+	 * Used to cache requested metadata so that we don't have a bunch of unused fields.
+	 */
 	private Map<String, Object> meta;
 
 	/**
@@ -48,7 +69,6 @@ public class Stringe implements CharSequence, Iterable<Chare> {
 
 	/**
 	 * Constructs a new Stringe from another Stringe.
-	 * Useful for cloning Stringes.
 	 *
 	 * @param stre The Stringe to clone.
 	 */
@@ -110,7 +130,7 @@ public class Stringe implements CharSequence, Iterable<Chare> {
 	}
 
 	/**
-	 * Converts the specified value into a Stringe.
+	 * Converts the specified object into a Stringe.
 	 *
 	 * @param obj The object to convert.
 	 */
@@ -595,7 +615,7 @@ public class Stringe implements CharSequence, Iterable<Chare> {
 	 * @param left The left side of the slice.
 	 * @param right The right side of the slice.
 	 *
-	 * @throws IllegalArgumentException If either of the arguments are null.
+	 * @throws IllegalArgumentException If the right side of the slice is less than the left side.
 	 * @throws StringIndexOutOfBoundsException If either of the arguments are negative, or greater than the length of the Stringe.
 	 */
 	public Stringe slice(int left, int right) throws IllegalArgumentException, StringIndexOutOfBoundsException {
@@ -622,7 +642,7 @@ public class Stringe implements CharSequence, Iterable<Chare> {
 	 *
 	 * @throws StringIndexOutOfBoundsException If the new length is negative or the Stringe is expanded beyond the ends of the string.
 	 */
-	public Stringe dilate(int left, int right) throws IllegalArgumentException, StringIndexOutOfBoundsException {
+	public Stringe dilate(int left, int right) throws StringIndexOutOfBoundsException {
 		int exOffset = offset - left;
 
 		if(exOffset < 0) {
@@ -746,7 +766,7 @@ public class Stringe implements CharSequence, Iterable<Chare> {
 	}
 
 	/**
-	 * Indicates whether the left side of the line on which the Stringe exists is composed entirely of white space.
+	 * Determines whether the left side of the line on which the Stringe exists is composed entirely of white space.
 	 */
 	public boolean isLeftPadded() {
 		if(offset == 0) {
@@ -773,7 +793,7 @@ public class Stringe implements CharSequence, Iterable<Chare> {
 	}
 
 	/**
-	 * Indicates whether the right side of the line on which the Stringe exists is composed entirely of white space.
+	 * Determines whether the right side of the line on which the Stringe exists is composed entirely of white space.
 	 */
 	public boolean isRightPadded() {
 		boolean found = false;
@@ -1137,7 +1157,7 @@ public class Stringe implements CharSequence, Iterable<Chare> {
 	}
 
 	/**
-	 * Returns the hash of the current Stringe.
+	 * Returns the hash code of the current Stringe.
 	 */
 	@Override
 	public int hashCode() {
@@ -1186,7 +1206,7 @@ public class Stringe implements CharSequence, Iterable<Chare> {
 		public final boolean[] bases;
 
 		/**
-		 * Creates a new Stref instance and populates the Chare and base arrays.
+		 * Constructs a new Stref and populates the Chare and base arrays.
 		 *
 		 * @param str The underlying String object to set.
 		 */
