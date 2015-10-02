@@ -38,7 +38,7 @@ Substringes keep track of the line, column, and index on which they appear. This
 ```java
 List<Stringe> lines = new Stringe("Hello\nWorld!").split('\n');
 for(Stringe substringe : lines) {
-    System.out.println("Line {0}: {1}", substringe.getLine(), substringe.getValue());
+    System.out.printf("Line %d: %s", substringe.getLine(), substringe.getValue());
 }
 ```
 ```
