@@ -3,9 +3,9 @@ JStringes
 
 ##What is a *stringe*?!
 
-The *Stringe* is a wrapper for the Java String object that tracks line, column, offset, and other metadata for substrings.
+The *Stringe* is a wrapper for the Java String object that tracks line, column, offset, and other metadata for substrings. See the [Javadoc](https://fauxpark.github.io/jstringes) for the full set of features supported.
 
-Stringes were originally dreamt up by TheBerkin in C# - [check it out here](https://github.com/TheBerkin/Stringes). It's much more feature-filled than this port currently is.
+Stringes were originally dreamt up by TheBerkin in C# - you should [check it out here](https://github.com/TheBerkin/Stringes).
 
 Stringes can be created from normal strings, either through the constructor or using `Stringe.toStringe()`. There is no operator overloading in Java, so we don't have the luxury of simply assigning a String to a Stringe.
 ```java
