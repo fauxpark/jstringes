@@ -65,3 +65,11 @@ Stringe a = parent.substringe(9, 1); // "("
 Stringe b = parent.substringe(20, 1); // ")"
 System.out.println(Stringe.between(a, b)); // "some words"
 ```
+
+##Lexers
+
+The Stringes library contains all the tools you need to write a lexer. The lexer-specific classes are:
+* `Lexer<T>`: The main lexer class, which generates tokens according to user-specified rules.
+* `Token<T>`: The token class, which extends the `Stringe` class, includes information identifying the token type using a user-specified type. An enum is recommended for the type parameter.
+
+**For an example of how to make a lexer, see the [LexerDemo](https://github.com/fauxpark/jstringes/blob/master/src/lexerdemo/java/net/fauxpark/lexerdemo/LexerDemo.java) source!**
