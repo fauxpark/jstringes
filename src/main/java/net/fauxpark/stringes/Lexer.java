@@ -28,12 +28,12 @@ public class Lexer<T> {
 	/**
 	 * The list of normal priority constant rules.
 	 */
-	private List<TwoTuple<String, T>> listNormal;
+	private List<ThreeTuple<String, T, Boolean>> listNormal;
 
 	/**
 	 * The list of high priority constant rules.
 	 */
-	private List<TwoTuple<String, T>> listHigh;
+	private List<ThreeTuple<String, T, Boolean>> listHigh;
 
 	/**
 	 * The list of regex rules.
@@ -106,11 +106,11 @@ public class Lexer<T> {
 	 * @param id The identifier to get the symbol for.
 	 */
 	public String getSymbolForId(T id) {
-		List<TwoTuple<String, T>> listConcat = new ArrayList<>();
+		List<ThreeTuple<String, T, Boolean>> listConcat = new ArrayList<>();
 		listConcat.addAll(listNormal);
 		listConcat.addAll(listHigh);
 
-		for(TwoTuple<String, T> rule : listConcat) {
+		for(ThreeTuple<String, T, Boolean> rule : listConcat) {
 			if(id.equals(rule.b)) {
 				return rule.a;
 			}
@@ -125,11 +125,11 @@ public class Lexer<T> {
 	 * @param symbol The symbol to test for.
 	 */
 	private boolean available(String symbol) {
-		List<TwoTuple<String, T>> listConcat = new ArrayList<>();
+		List<ThreeTuple<String, T, Boolean>> listConcat = new ArrayList<>();
 		listConcat.addAll(listNormal);
 		listConcat.addAll(listHigh);
 
-		for(TwoTuple<String, T> rule : listConcat) {
+		for(ThreeTuple<String, T, Boolean> rule : listConcat) {
 			if(symbol.equals(rule.a)) {
 				return false;
 			}
@@ -221,7 +221,7 @@ public class Lexer<T> {
 			throw new UnsupportedOperationException("A rule with the symbol '" + symbol + "' already exists");
 		}
 
-		(priority == SymbolPriority.FIRST ? listHigh : listNormal).add(Tuples.create(symbol, id));
+		(priority == SymbolPriority.FIRST ? listHigh : listNormal).add(Tuples.create(symbol, id, true));
 		punctuation.add(symbol.charAt(0));
 	}
 
@@ -264,7 +264,7 @@ public class Lexer<T> {
 				throw new UnsupportedOperationException("A rule with the symbol '" + s + "' already exists");
 			}
 
-			(priority == SymbolPriority.FIRST ? listHigh : listNormal).add(Tuples.create(s, id));
+			(priority == SymbolPriority.FIRST ? listHigh : listNormal).add(Tuples.create(s, id, true));
 			punctuation.add(s.charAt(0));
 		}
 	}
@@ -305,7 +305,7 @@ public class Lexer<T> {
 			throw new UnsupportedOperationException("A rule with the symbol '" + symbol + "' already exists");
 		}
 
-		(priority == SymbolPriority.FIRST ? listHigh : listNormal).add(Tuples.create(symbol, id));
+		(priority == SymbolPriority.FIRST ? listHigh : listNormal).add(Tuples.create(symbol, id, ignoreCase));
 		punctuation.add(symbol.charAt(0));
 	}
 
@@ -350,7 +350,7 @@ public class Lexer<T> {
 				throw new UnsupportedOperationException("A rule with the symbol '" + s + "' already exists");
 			}
 
-			(priority == SymbolPriority.FIRST ? listHigh : listNormal).add(Tuples.create(s, id));
+			(priority == SymbolPriority.FIRST ? listHigh : listNormal).add(Tuples.create(s, id, ignoreCase));
 			punctuation.add(s.charAt(0));
 		}
 	}
@@ -546,7 +546,7 @@ public class Lexer<T> {
 			return;
 		}
 
-		Comparator<TwoTuple<String, T>> cmp = (t1, t2) -> Integer.compare(t1.a.length(), t2.a.length());
+		Comparator<ThreeTuple<String, T, Boolean>> cmp = (t1, t2) -> Integer.compare(t1.a.length(), t2.a.length());
 		Collections.sort(listNormal, cmp);
 		Collections.sort(listHigh, cmp);
 		Collections.sort(regexes, (t1, t2) -> Integer.compare(t1.c.ordinal(), t2.c.ordinal()));
@@ -572,7 +572,7 @@ public class Lexer<T> {
 	/**
 	 * Returns the list of normal priority symbol rules.
 	 */
-	List<TwoTuple<String, T>> getNormalSymbols() {
+	List<ThreeTuple<String, T, Boolean>> getNormalSymbols() {
 		sort();
 
 		return listNormal;
@@ -581,7 +581,7 @@ public class Lexer<T> {
 	/**
 	 * Returns the list of high priority symbol rules.
 	 */
-	List<TwoTuple<String, T>> getHighSymbols() {
+	List<ThreeTuple<String, T, Boolean>> getHighSymbols() {
 		sort();
 
 		return listHigh;

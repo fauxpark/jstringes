@@ -394,7 +394,7 @@ public class Stringe implements CharSequence, Iterable<Chare> {
 	 * @param str The string to search for.
 	 */
 	public int indexOf(String str) {
-		return getValue().indexOf(str);
+		return indexOf(str, 0, false);
 	}
 
 	/**
@@ -405,6 +405,21 @@ public class Stringe implements CharSequence, Iterable<Chare> {
 	 * @param startIndex The index at which to begin the search.
 	 */
 	public int indexOf(String str, int startIndex) {
+		return indexOf(str, startIndex, false);
+	}
+
+	/**
+	 * Returns the zero-based index at which the specified string first occurs, relative to the substringe.
+	 *
+	 * @param str The string to search for.
+	 * @param startIndex The index at which to begin the search.
+	 * @param ignoreCase Whether to ignore case considerations.
+	 */
+	public int indexOf(String str, int startIndex, boolean ignoreCase) {
+		if(ignoreCase) {
+			return getValue().toLowerCase().indexOf(str.toLowerCase(), startIndex);
+		}
+
 		return getValue().indexOf(str, startIndex);
 	}
 
@@ -414,9 +429,7 @@ public class Stringe implements CharSequence, Iterable<Chare> {
 	 * @param str The string to search for.
 	 */
 	public int indexOfTotal(String str) {
-		int index = getValue().indexOf(str);
-
-		return index == -1 ? index : index + offset;
+		return indexOfTotal(str, 0, false);
 	}
 
 	/**
@@ -427,7 +440,24 @@ public class Stringe implements CharSequence, Iterable<Chare> {
 	 * @param startIndex The index at which to begin the search.
 	 */
 	public int indexOfTotal(String str, int startIndex) {
-		int index = getValue().indexOf(str, startIndex);
+		return indexOfTotal(str, startIndex, false);
+	}
+
+	/**
+	 * Returns the zero-based index at which the specified string first occurs, relative to the parent.
+	 *
+	 * @param str The string to search for.
+	 * @param startIndex The index at which to begin the search.
+	 * @param ignoreCase Whether to ignore case considerations.
+	 */
+	public int indexOfTotal(String str, int startIndex, boolean ignoreCase) {
+		int index;
+
+		if(ignoreCase) {
+			index = getValue().toLowerCase().indexOf(str.toLowerCase(), startIndex);
+		} else {
+			index = getValue().indexOf(str, startIndex);
+		}
 
 		return index == -1 ? index : index + offset;
 	}
@@ -438,7 +468,7 @@ public class Stringe implements CharSequence, Iterable<Chare> {
 	 * @param c The character to search for.
 	 */
 	public int indexOf(char c) {
-		return getValue().indexOf(c);
+		return indexOf(c, 0, false);
 	}
 
 	/**
@@ -449,6 +479,21 @@ public class Stringe implements CharSequence, Iterable<Chare> {
 	 * @param startIndex The index at which to begin the search.
 	 */
 	public int indexOf(char c, int startIndex) {
+		return indexOf(c, startIndex, false);
+	}
+
+	/**
+	 * Returns the zero-based index at which the specified character first occurs, relative to the substringe.
+	 *
+	 * @param c The character to search for.
+	 * @param startIndex The index at which to begin the search.
+	 * @param ignoreCase Whether to ignore case considerations.
+	 */
+	public int indexOf(char c, int startIndex, boolean ignoreCase) {
+		if(ignoreCase) {
+			return getValue().toLowerCase().indexOf(Character.toLowerCase(c), startIndex);
+		}
+
 		return getValue().indexOf(c, startIndex);
 	}
 
@@ -458,9 +503,7 @@ public class Stringe implements CharSequence, Iterable<Chare> {
 	 * @param c The character to search for.
 	 */
 	public int indexOfTotal(char c) {
-		int index = getValue().indexOf(c);
-
-		return index == -1 ? index : index + offset;
+		return indexOfTotal(c, 0, false);
 	}
 
 	/**
@@ -471,7 +514,24 @@ public class Stringe implements CharSequence, Iterable<Chare> {
 	 * @param startIndex The index at which to begin the search.
 	 */
 	public int indexOfTotal(char c, int startIndex) {
-		int index = getValue().indexOf(c, startIndex);
+		return indexOfTotal(c, startIndex, false);
+	}
+
+	/**
+	 * Returns the zero-based index at which the specified character first occurs, relative to the parent.
+	 *
+	 * @param c The character to search for.
+	 * @param startIndex The index at which to begin the search.
+	 * @param ignoreCase Whether to ignore case considerations.
+	 */
+	public int indexOfTotal(char c, int startIndex, boolean ignoreCase) {
+		int index;
+
+		if(ignoreCase) {
+			index = getValue().toLowerCase().indexOf(Character.toLowerCase(c), startIndex);
+		} else {
+			index = getValue().indexOf(c, startIndex);
+		}
 
 		return index == -1 ? index : index + offset;
 	}
@@ -483,7 +543,7 @@ public class Stringe implements CharSequence, Iterable<Chare> {
 	 * @param str The string to search for.
 	 */
 	public int lastIndexOf(String str) {
-		return getValue().lastIndexOf(str);
+		return lastIndexOf(str, str.length(), false);
 	}
 
 	/**
@@ -494,6 +554,22 @@ public class Stringe implements CharSequence, Iterable<Chare> {
 	 * @param endIndex The index at which to begin the search.
 	 */
 	public int lastIndexOf(String str, int endIndex) {
+		return lastIndexOf(str, endIndex, false);
+	}
+
+	/**
+	 * Returns the zero-based index at which the specified string last occurs, relative to the substringe.
+	 * The search starts at the specified index, and moves backwards.
+	 *
+	 * @param str The string to search for.
+	 * @param endIndex The index at which to begin the search.
+	 * @param ignoreCase Whether to ignore case considerations.
+	 */
+	public int lastIndexOf(String str, int endIndex, boolean ignoreCase) {
+		if(ignoreCase) {
+			return getValue().toLowerCase().lastIndexOf(str.toLowerCase(), endIndex);
+		}
+
 		return getValue().lastIndexOf(str, endIndex);
 	}
 
@@ -504,9 +580,7 @@ public class Stringe implements CharSequence, Iterable<Chare> {
 	 * @param str The string to search for.
 	 */
 	public int lastIndexOfTotal(String str) {
-		int index = getValue().lastIndexOf(str);
-
-		return index == -1 ? index : index + offset;
+		return lastIndexOfTotal(str, getValue().length(), false);
 	}
 
 	/**
@@ -517,7 +591,25 @@ public class Stringe implements CharSequence, Iterable<Chare> {
 	 * @param endIndex The index at which to begin the search.
 	 */
 	public int lastIndexOfTotal(String str, int endIndex) {
-		int index = getValue().lastIndexOf(str, endIndex);
+		return lastIndexOfTotal(str, endIndex, false);
+	}
+
+	/**
+	 * Returns the zero-based index at which the specified string last occurs, relative to the parent.
+	 * The search starts at the specified index, and moves backwards.
+	 *
+	 * @param str The string to search for.
+	 * @param endIndex The index at which to begin the search.
+	 * @param ignoreCase Whether to ignore case considerations.
+	 */
+	public int lastIndexOfTotal(String str, int endIndex, boolean ignoreCase) {
+		int index;
+
+		if(ignoreCase) {
+			index = getValue().toLowerCase().lastIndexOf(str.toLowerCase(), endIndex);
+		} else {
+			index = getValue().lastIndexOf(str, endIndex);
+		}
 
 		return index == -1 ? index : index + offset;
 	}
@@ -528,7 +620,7 @@ public class Stringe implements CharSequence, Iterable<Chare> {
 	 * @param c The character to search for.
 	 */
 	public int lastIndexOf(char c) {
-		return getValue().lastIndexOf(c);
+		return lastIndexOf(c, getValue().length(), false);
 	}
 
 	/**
@@ -539,6 +631,22 @@ public class Stringe implements CharSequence, Iterable<Chare> {
 	 * @param endIndex The index at which to begin the search.
 	 */
 	public int lastIndexOf(char c, int endIndex) {
+		return lastIndexOf(c, endIndex, false);
+	}
+
+	/**
+	 * Returns the zero-based index at which the specified character last occurs, relative to the substringe.
+	 * The search starts at the specified index, and moves backwards.
+	 *
+	 * @param c The character to search for.
+	 * @param endIndex The index at which to begin the search.
+	 * @param ignoreCase Whether to ignore case considerations.
+	 */
+	public int lastIndexOf(char c, int endIndex, boolean ignoreCase) {
+		if(ignoreCase) {
+			return getValue().toLowerCase().lastIndexOf(Character.toLowerCase(c), endIndex);
+		}
+
 		return getValue().lastIndexOf(c, endIndex);
 	}
 
@@ -548,9 +656,7 @@ public class Stringe implements CharSequence, Iterable<Chare> {
 	 * @param c The character to search for.
 	 */
 	public int lastIndexOfTotal(char c) {
-		int index = getValue().lastIndexOf(c);
-
-		return index == -1 ? index : index + offset;
+		return lastIndexOfTotal(c, getValue().length(), false);
 	}
 
 	/**
@@ -561,7 +667,25 @@ public class Stringe implements CharSequence, Iterable<Chare> {
 	 * @param endIndex The index at which to begin the search.
 	 */
 	public int lastIndexOfTotal(char c, int endIndex) {
-		int index = getValue().lastIndexOf(c, endIndex);
+		return lastIndexOfTotal(c, endIndex, false);
+	}
+
+	/**
+	 * Returns the zero-based index at which the specified character last occurs, relative to the parent.
+	 * The search starts at the specified index, and moves backwards.
+	 *
+	 * @param c The character to search for.
+	 * @param endIndex The index at which to begin the search.
+	 * @param ignoreCase Whether to ignore case considerations.
+	 */
+	public int lastIndexOfTotal(char c, int endIndex, boolean ignoreCase) {
+		int index;
+
+		if(ignoreCase) {
+			index = getValue().toLowerCase().lastIndexOf(Character.toLowerCase(c), endIndex);
+		} else {
+			index = getValue().lastIndexOf(c, endIndex);
+		}
 
 		return index == -1 ? index : index + offset;
 	}

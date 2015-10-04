@@ -263,6 +263,20 @@ public class StringeReader {
 	}
 
 	/**
+	 * Indicates whether the specified string occurs at the reader's current position.
+	 *
+	 * @param str The string to test for.
+	 * @param ignoreCase Whether to ignore case considerations.
+	 */
+	public boolean isNext(String str, boolean ignoreCase) {
+		if(str == null || str.isEmpty()) {
+			return false;
+		}
+
+		return stringe.indexOf(str, pos, ignoreCase) == pos;
+	}
+
+	/**
 	 * Indicates whether the specified regular expression matches the input at the reader's current position.
 	 *
 	 * @param regex The regular expression to test for.
@@ -363,8 +377,8 @@ public class StringeReader {
 
 				if(rules.hasPunctuation(peekChar())) {
 					// Check high priority symbol rules
-					for(TwoTuple<String, T> t : rules.getHighSymbols()) {
-						if(isNext(t.a)) {
+					for(ThreeTuple<String, T, Boolean> t : rules.getHighSymbols()) {
+						if(isNext(t.a, t.c)) {
 							// Return undefined token if present
 							if(captureUndef && u < pos) {
 								if(rules.getIgnoreRules().contains(rules.getUndefinedCaptureRule().b)) {
@@ -460,8 +474,8 @@ public class StringeReader {
 
 				if(rules.hasPunctuation(peekChar())) {
 					// Check normal priority symbol rules
-					for(TwoTuple<String, T> t : rules.getNormalSymbols()) {
-						if(isNext(t.a)) {
+					for(ThreeTuple<String, T, Boolean> t : rules.getNormalSymbols()) {
+						if(isNext(t.a, t.c)) {
 							// Return undefined token if present
 							if(captureUndef && u < pos) {
 								if(rules.getIgnoreRules().contains(rules.getUndefinedCaptureRule().b)) {
