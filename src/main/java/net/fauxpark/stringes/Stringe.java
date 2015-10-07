@@ -5,7 +5,6 @@ import java.util.HashMap;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
-import java.util.regex.Pattern;
 
 /**
  * Represents a string or a substring in relation to its parent.
@@ -1325,7 +1324,7 @@ public class Stringe implements CharSequence, Iterable<Chare> {
 		public final Chare[] chares;
 
 		/**
-		 * An array for keeping track of non-combining characters.
+		 * An array for keeping track of non-combining characters for column numbers.
 		 */
 		public final boolean[] bases;
 
@@ -1339,8 +1338,9 @@ public class Stringe implements CharSequence, Iterable<Chare> {
 			chares = new Chare[str.length()];
 			bases = new boolean[str.length()];
 
+			// If the character is not combining, it takes up space, and thus a column.
 			for(int i = 0; i < str.length(); i++) {
-				if(!Pattern.matches("\\p{M}", "" + str.charAt(i))) {
+				if(Character.getType(str.charAt(i)) != Character.NON_SPACING_MARK) {
 					bases[i] = true;
 				}
 			}
