@@ -1,7 +1,5 @@
 package net.fauxpark.stringes;
 
-import java.util.Arrays;
-
 public class Util {
 	/**
 	 * Calculates an aggregated hash code from the specified objects.
@@ -9,7 +7,13 @@ public class Util {
 	 * @param objects The objects to hash.
 	 */
 	public static int hashOf(Object... objects) {
-		return Arrays.stream(objects).map(o -> o.hashCode()).reduce((hash, next) -> hash * 31 + next).get();
+		int hash = 0;
+
+		for(Object o : objects) {
+			hash = hash * 31 + o.hashCode();
+		}
+
+		return hash;
 	}
 
 	/**
