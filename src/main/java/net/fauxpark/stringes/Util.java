@@ -2,7 +2,7 @@ package net.fauxpark.stringes;
 
 public class Util {
 	/**
-	 * Calculates an aggregated hash code from the specified objects.
+	 * Calculates a hash code from the specified objects.
 	 *
 	 * @param objects The objects to hash.
 	 */
@@ -10,7 +10,7 @@ public class Util {
 		int hash = 0;
 
 		for(Object o : objects) {
-			hash = hash * 31 + o.hashCode();
+			hash = hash * 31 + (o == null ? 0 : o.hashCode());
 		}
 
 		return hash;
