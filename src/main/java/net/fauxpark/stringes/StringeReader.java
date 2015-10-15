@@ -226,7 +226,6 @@ public class StringeReader {
 			throw new IllegalArgumentException("Regex cannot be null");
 		}
 
-		result = null;
 		Matcher matcher = regex.matcher(stringe.getValue());
 		boolean success = matcher.find(pos);
 
@@ -234,7 +233,7 @@ public class StringeReader {
 			return false;
 		}
 
-		result = stringe.substringe(pos, matcher.end() - pos);
+		result.mutate(stringe.substringe(pos, matcher.end() - pos));
 		pos = matcher.end();
 
 		return true;
@@ -305,7 +304,6 @@ public class StringeReader {
 			throw new IllegalArgumentException("Regex cannot be null");
 		}
 
-		result = null;
 		Matcher matcher = regex.matcher(stringe.getValue());
 		boolean success = matcher.find(pos);
 
@@ -313,7 +311,7 @@ public class StringeReader {
 			return false;
 		}
 
-		result = stringe.substringe(pos, matcher.end() - pos);
+		result.mutate(stringe.substringe(pos, matcher.end() - pos));
 
 		return true;
 	}

@@ -81,6 +81,20 @@ public class Stringe implements CharSequence, Iterable<Chare> {
 	}
 
 	/**
+	 * Mutates the Stringe into another Stringe.
+	 *
+	 * @param stre The Stringe to mutate into.
+	 */
+	void mutate(Stringe stre) {
+		stref = stre.stref;
+		offset = stre.offset;
+		length = stre.length;
+		line = stre.line;
+		column = stre.column;
+		substring = stre.substring;
+	}
+
+	/**
 	 * Constructs a new Stringe from a parent Stringe with a relative offset and a length.
 	 *
 	 * @param parent The parent Stringe to create the Stringe from.
