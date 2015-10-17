@@ -78,6 +78,38 @@ public class StringeReader {
 	}
 
 	/**
+	 * Reads a Stringe from the input and advances the position to the next occurrence of the specified character.
+	 * If no match is found, it reads to the end.
+	 *
+	 * @param c The character to stop at.
+	 */
+	public Stringe readStringeUntil(char c) {
+		int start = pos;
+
+		while(pos < stringe.length() && stringe.charAt(pos) != c) {
+			pos++;
+		}
+
+		return stringe.substringe(start, pos - start);
+	}
+
+	/**
+	 * Reads a Stringe from the input and advances the position to the next occurrence of any of the specified characters.
+	 * If no match is found, it reads to the end.
+	 *
+	 * @param cs The characters to stop at.
+	 */
+	public Stringe readStringeUntilAny(char... cs) {
+		int start = pos;
+
+		while(pos < stringe.length() && Util.contains(cs, stringe.charAt(pos))) {
+			pos++;
+		}
+
+		return stringe.substringe(start, pos - start);
+	}
+
+	/**
 	 * Indicates whether the specified character occurs at the reader's current position.
 	 * If a match is found, the reader consumes it.
 	 *
@@ -89,6 +121,35 @@ public class StringeReader {
 		}
 
 		pos++;
+
+		return true;
+	}
+
+	/**
+	 * Indicates whether the specified predicate matches the specified number of characters at the reader's current position.
+	 * If and only if the function returns true every time, the reader consumes them.
+	 *
+	 * @param predicate The function to read the characters with.
+	 * @param count The number of times to test.
+	 */
+	public boolean eatExactlyWhere(Function<Character, Boolean> predicate, int count) {
+		if(atEndOfStringe() || !predicate.apply(peekChare().getCharacter())) {
+			return false;
+		}
+
+		int oldPos = pos;
+		int n = 0;
+
+		do {
+			pos++;
+			n++;
+		} while(!atEndOfStringe() && predicate.apply(peekChare().getCharacter()) && n < count);
+
+		if(n < count) {
+			pos = oldPos;
+
+			return false;
+		}
 
 		return true;
 	}
@@ -107,6 +168,44 @@ public class StringeReader {
 		do {
 			pos++;
 		} while(peekChar() == c);
+
+		return true;
+	}
+
+	/**
+	 * Indicates whether any of the specified characters occurs at the reader's current position.
+	 * If a match is found, the reader consumes it.
+	 *
+	 * @param cs The characters to test for.
+	 */
+	public boolean eatAny(char... cs) {
+		if(!atEndOfStringe() && Util.contains(cs, stringe.charAt(pos))) {
+			pos ++;
+
+			return true;
+		}
+
+		return false;
+	}
+
+	/**
+	 * Indicates whether any of the specified characters occur at the reader's current position.
+	 * If a match is found, the reader consumes it and any following matches.
+	 *
+	 * @param cs The characters to test for.
+	 */
+	public boolean eatAll(char... cs) {
+		if(atEndOfStringe()) {
+			return false;
+		}
+
+		if(!Util.contains(cs, stringe.charAt(pos))) {
+			return false;
+		}
+
+		do {
+			pos++;
+		} while(Util.contains(cs, stringe.charAt(pos)));
 
 		return true;
 	}
@@ -249,16 +348,21 @@ public class StringeReader {
 	}
 
 	/**
+	 * Indicates whether any of the specified characters occur at the reader's current position.
+	 *
+	 * @param cs The characters to test for.
+	 */
+	public boolean isNext(char... cs) {
+		return !atEndOfStringe() && Util.contains(cs, stringe.charAt(pos));
+	}
+
+	/**
 	 * Indicates whether the specified string occurs at the reader's current position.
 	 *
 	 * @param str The string to test for.
 	 */
 	public boolean isNext(String str) {
-		if(str == null || str.isEmpty()) {
-			return false;
-		}
-
-		return stringe.indexOf(str, pos) == pos;
+		return isNext(str, false);
 	}
 
 	/**
@@ -327,6 +431,47 @@ public class StringeReader {
 		}
 
 		return pos > oldPos;
+	}
+
+	/**
+	 * Indicates whether the specified character matches the input before the reader's current position.
+	 *
+	 * @param c The character to test for.
+	 */
+	public boolean wasLast(char c) {
+		return pos > 0 && stringe.charAt(pos - 1) == c;
+	}
+
+	/**
+	 * Indicates whether any of the specified characters match the input before the reader's current position.
+	 *
+	 * @param cs The characters to test for.
+	 */
+	public boolean wasLast(char... cs) {
+		return pos > 0 && Util.contains(cs, stringe.charAt(pos - 1));
+	}
+
+	/**
+	 * Indicates whether the specified string matches the input before the reader's current position.
+	 *
+	 * @param str The string to test for.
+	 */
+	public boolean wasLast(String str) {
+		return wasLast(str, false);
+	}
+
+	/**
+	 * Indicates whether the specified string matches the input before the reader's current position.
+	 *
+	 * @param str The string to test for.
+	 * @param ignoreCase Whether to ignore case considerations.
+	 */
+	public boolean wasLast(String str, boolean ignoreCase) {
+		if(str == null || str.isEmpty()) {
+			return false;
+		}
+
+		return pos > str.length() && stringe.lastIndexOf(str, pos, ignoreCase) == pos - str.length();
 	}
 
 	/**
