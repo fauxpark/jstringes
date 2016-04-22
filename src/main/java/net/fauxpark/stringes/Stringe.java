@@ -368,7 +368,7 @@ public class Stringe implements CharSequence, Iterable<Chare> {
 	 */
 	private Map<String, Object> getMeta() {
 		if(meta == null) {
-			meta = new HashMap<String, Object>();
+			meta = new HashMap<>();
 		}
 
 		return meta;

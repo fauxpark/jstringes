@@ -391,7 +391,7 @@ public class Lexer<T> {
 			}
 		}
 
-		regexes.add(Tuples.create(regex, new RuleMatchValueGenerator<T>(id), priority));
+		regexes.add(Tuples.create(regex, new RuleMatchValueGenerator<>(id), priority));
 	}
 
 	/**
@@ -434,7 +434,7 @@ public class Lexer<T> {
 			}
 		}
 
-		regexes.add(Tuples.create(regex, new RuleMatchValueGenerator<T>(generator), priority));
+		regexes.add(Tuples.create(regex, new RuleMatchValueGenerator<>(generator), priority));
 	}
 
 	/**
@@ -489,7 +489,7 @@ public class Lexer<T> {
 		List<Token<T>> iterable = new ArrayList<>();
 
 		while(!reader.atEndOfStringe()) {
-			iterable.add(reader.readToken(this, (stringe, t) -> new Token<T>(t, stringe)));
+			iterable.add(reader.readToken(this, (stringe, t) -> new Token<>(t, stringe)));
 		}
 
 		return iterable;
