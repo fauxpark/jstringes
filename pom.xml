@@ -4,7 +4,7 @@
 	<description>Java port of Stringes by TheBerkin</description>
 	<groupId>net.fauxpark</groupId>
 	<artifactId>jstringes</artifactId>
-	<version>1.1</version>
+	<version>1.2</version>
 	<modelVersion>4.0.0</modelVersion>
 	<url>https://github.com/fauxpark/jstringes</url>
 	<packaging>jar</packaging>
@@ -23,10 +23,11 @@
 			<plugin>
 				<groupId>org.apache.maven.plugins</groupId>
 				<artifactId>maven-compiler-plugin</artifactId>
-				<version>3.5.1</version>
+				<version>3.6.1</version>
 				<configuration>
 					<source>1.8</source>
 					<target>1.8</target>
+					<encoding>UTF-8</encoding>
 				</configuration>
 			</plugin>
 		</plugins>
