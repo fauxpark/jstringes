@@ -2,7 +2,7 @@ JStringes
 =========
 [![Build Status](https://travis-ci.org/fauxpark/jstringes.svg)](https://travis-ci.org/fauxpark/jstringes)
 
-##What is a *stringe*?!
+## What is a *stringe*?!
 
 The *Stringe* is a wrapper for the Java String object that tracks line, column, offset, and other metadata for substrings. See the [Javadoc](https://fauxpark.github.io/jstringes) for the full set of features supported.
 
@@ -14,7 +14,7 @@ Stringe stringeA = new Stringe("Hello\nWorld!");
 Stringe stringeB = Stringe.toStringe("Hello\nWorld!");
 ```
 
-###Support for native String methods
+### Support for native String methods
 
 The `Stringe` class supports many of the same fabulous methods that regular strings have.
 Unlike the String type, however, methods like `Stringe.split` return a `List<Stringe>` instead of an array.
@@ -23,7 +23,7 @@ List<Stringe> lines = stringe.split('\n');
 List<Stringe> words = stringe.split(' ');
 ```
 
-###Finding the parent string from a substringe
+### Finding the parent string from a substringe
 
 Each *substringe* can be traced back to the string it originally came from.
 ```java
@@ -32,7 +32,7 @@ Stringe substr = parent.substringe(16, 3); // "fox"
 System.out.println(substr.getParent()); // "The quick brown fox jumps over the lazy dog"
 ```
 
-###Location tracking
+### Location tracking
 
 Substringes keep track of the line, column, and index on which they appear. This information can be easily accessed through properties. This is **especially** useful when writing lexers, so that errors in compiled code can be traced back to the exact place where the associated tokens were read.
 
@@ -47,7 +47,7 @@ Line 1: Hello
 Line 2: World!
 ```
 
-###Ranges
+### Ranges
 
 In some instances, such as when working with tokens, retrieving a range of text between two elements in the parent string can yield extremely useful data. This is made possible in Stringes through two methods: `Stringe.between()` and `Stringe.range()`.
 
@@ -67,7 +67,7 @@ Stringe b = parent.substringe(20, 1); // ")"
 System.out.println(Stringe.between(a, b)); // "some words"
 ```
 
-##Lexers
+## Lexers
 
 The Stringes library contains all the tools you need to write a lexer. The lexer-specific classes are:
 * `Lexer<T>`: The main lexer class, which generates tokens according to user-specified rules.
