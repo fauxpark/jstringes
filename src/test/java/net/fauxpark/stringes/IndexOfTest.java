@@ -10,7 +10,7 @@ public class IndexOfTest {
 		Stringe stre = new Stringe("Hello world");
 
 		assertEquals(6, stre.indexOf("world"));
-		assertEquals(6, stre.indexOf("WoRlD", 0, true));
+		assertEquals(6, stre.indexOfIgnoreCase("WoRlD", 0));
 	}
 
 	@Test
@@ -19,7 +19,7 @@ public class IndexOfTest {
 		Stringe sub = parent.substringe(1, 8);
 
 		assertEquals(6, sub.indexOfTotal("wor"));
-		assertEquals(6, sub.indexOfTotal("WoR", 0, true));
+		assertEquals(6, sub.indexOfTotalIgnoreCase("WoR", 0));
 	}
 
 	@Test
@@ -27,7 +27,7 @@ public class IndexOfTest {
 		Stringe stre = new Stringe("Hello world");
 
 		assertEquals(6, stre.indexOf('w'));
-		assertEquals(6, stre.indexOf('W', 0, true));
+		assertEquals(6, stre.indexOfIgnoreCase('W', 0));
 	}
 
 	@Test
@@ -36,6 +36,6 @@ public class IndexOfTest {
 		Stringe sub = parent.substringe(1, 8);
 
 		assertEquals(6, sub.indexOfTotal('w'));
-		assertEquals(6, sub.indexOfTotal('W', 0, true));
+		assertEquals(6, sub.indexOfTotalIgnoreCase('W', 0));
 	}
 }

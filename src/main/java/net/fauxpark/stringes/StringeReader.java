@@ -376,7 +376,11 @@ public class StringeReader {
 			return false;
 		}
 
-		return stringe.indexOf(str, pos, ignoreCase) == pos;
+		if(ignoreCase) {
+			return stringe.indexOfIgnoreCase(str, pos) == pos;
+		} else {
+			return stringe.indexOf(str) == pos;
+		}
 	}
 
 	/**
@@ -471,7 +475,11 @@ public class StringeReader {
 			return false;
 		}
 
-		return pos > str.length() && stringe.lastIndexOf(str, pos, ignoreCase) == pos - str.length();
+		if(ignoreCase) {
+			return pos > str.length() && stringe.lastIndexOfIgnoreCase(str, pos) == pos - str.length();
+		} else {
+			return pos > str.length() && stringe.lastIndexOf(str, pos) == pos - str.length();
+		}
 	}
 
 	/**
