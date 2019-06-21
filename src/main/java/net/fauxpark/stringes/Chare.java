@@ -63,6 +63,8 @@ public final class Chare {
 
 	/**
 	 * Returns the Chare's source Stringe.
+	 *
+	 * @return The Stringe this Chare is part of.
 	 */
 	public Stringe getSource() {
 		return source;
@@ -70,13 +72,17 @@ public final class Chare {
 
 	/**
 	 * Returns the Chare's underlying character.
+	 *
+	 * @return The char value this Chare represents.
 	 */
 	public char getCharacter() {
 		return character;
 	}
 
 	/**
-	 * Returns the offset of the Chare relative to its source Stringe.
+	 * Returns the Chare's offset.
+	 *
+	 * @return The offset of the Chare relative to its source Stringe.
 	 */
 	public int getOffset() {
 		return offset;
@@ -84,6 +90,8 @@ public final class Chare {
 
 	/**
 	 * Returns the 1-based line number of the Chare.
+	 *
+	 * @return The line number this Chare is on.
 	 */
 	public int getLine() {
 		if(line == 0) {
@@ -95,6 +103,8 @@ public final class Chare {
 
 	/**
 	 * Returns the 1-based column number of the Chare.
+	 *
+	 * @return The column number this Chare is on.
 	 */
 	public int getColumn() {
 		if(column == 0) {
@@ -127,6 +137,8 @@ public final class Chare {
 
 	/**
 	 * Returns the string representation of the current Chare.
+	 * 
+	 * @return The Chare as a String.
 	 */
 	@Override
 	public String toString() {

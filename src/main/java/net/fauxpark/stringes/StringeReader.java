@@ -38,6 +38,8 @@ public class StringeReader {
 
 	/**
 	 * Indicates whether the reader position is at the end of the input string.
+	 *
+	 * @return True if no more Chares can be read.
 	 */
 	public boolean atEndOfStringe() {
 		return pos >= stringe.length();
@@ -45,6 +47,8 @@ public class StringeReader {
 
 	/**
 	 * Reads the next Chare from the input and consumes it.
+	 *
+	 * @return The Chare that was just read.
 	 */
 	public Chare readChare() {
 		return stringe.chareAt(pos++);
@@ -52,6 +56,8 @@ public class StringeReader {
 
 	/**
 	 * Reads the next Chare in the input, but does not consume it.
+	 *
+	 * @return The Chare at the next position, or null if no more Chares can be read.
 	 */
 	public Chare peekChare() {
 		return atEndOfStringe() ? null : stringe.chareAt(pos);
@@ -59,7 +65,8 @@ public class StringeReader {
 
 	/**
 	 * Reads the next character in the input, but does not consume it.
-	 * Returns -1 if no more characters can be read.
+	 *
+	 * @return The char at the next position, or -1 if no more characters can be read.
 	 */
 	public int peekChar() {
 		return atEndOfStringe() ? -1 : stringe.chareAt(pos).getCharacter();
@@ -69,6 +76,8 @@ public class StringeReader {
 	 * Reads a Stringe from the input and advances the position by the number of characters read.
 	 *
 	 * @param length The number of characters to read.
+	 *
+	 * @return A Stringe containing the characters that have been read.
 	 */
 	public Stringe readStringe(int length) {
 		int p = pos;
@@ -82,6 +91,8 @@ public class StringeReader {
 	 * If no match is found, it reads to the end.
 	 *
 	 * @param c The character to stop at.
+	 *
+	 * @return A Stringe containing the characters that have been read.
 	 */
 	public Stringe readStringeUntil(char c) {
 		int start = pos;
@@ -98,6 +109,8 @@ public class StringeReader {
 	 * If no match is found, it reads to the end.
 	 *
 	 * @param cs The characters to stop at.
+	 *
+	 * @return A Stringe containing the characters that have been read.
 	 */
 	public Stringe readStringeUntilAny(char... cs) {
 		int start = pos;
@@ -114,6 +127,8 @@ public class StringeReader {
 	 * If a match is found, the reader consumes it.
 	 *
 	 * @param c The character to test for.
+	 *
+	 * @return True if the character was present.
 	 */
 	public boolean eat(char c) {
 		if(atEndOfStringe() || peekChar() != c) {
@@ -131,6 +146,8 @@ public class StringeReader {
 	 *
 	 * @param predicate The function to read the characters with.
 	 * @param count The number of times to test.
+	 *
+	 * @return True if the predicate applied the given number of times.
 	 */
 	public boolean eatExactlyWhere(Function<Character, Boolean> predicate, int count) {
 		if(atEndOfStringe() || !predicate.apply(peekChare().getCharacter())) {
@@ -159,6 +176,8 @@ public class StringeReader {
 	 * If a match is found, the reader consumes it and any following matches.
 	 *
 	 * @param c The character to test for.
+	 *
+	 * @return True if the given character was present at least once.
 	 */
 	public boolean eatAll(char c) {
 		if(peekChar() != c) {
@@ -177,10 +196,12 @@ public class StringeReader {
 	 * If a match is found, the reader consumes it.
 	 *
 	 * @param cs The characters to test for.
+	 *
+	 * @return True if any of the given characters were present.
 	 */
 	public boolean eatAny(char... cs) {
 		if(!atEndOfStringe() && Util.contains(cs, stringe.charAt(pos))) {
-			pos ++;
+			pos++;
 
 			return true;
 		}
@@ -193,6 +214,8 @@ public class StringeReader {
 	 * If a match is found, the reader consumes it and any following matches.
 	 *
 	 * @param cs The characters to test for.
+	 *
+	 * @return True if any of the given characters were present at least once.
 	 */
 	public boolean eatAll(char... cs) {
 		if(atEndOfStringe()) {
@@ -215,6 +238,8 @@ public class StringeReader {
 	 * While the function returns true, the reader consumes it and any following matching characters.
 	 *
 	 * @param predicate The function to read the character with.
+	 *
+	 * @return True if the predicate applied at least once.
 	 */
 	public boolean eatWhile(Function<Character, Boolean> predicate) {
 		if(atEndOfStringe() || !predicate.apply((char) peekChar())) {
@@ -233,6 +258,8 @@ public class StringeReader {
 	 * While the function returns true, the reader consumes it and any following matching Chares.
 	 *
 	 * @param predicate The function to read the Chare with.
+	 *
+	 * @return True if the predicate applied at least once.
 	 */
 	public boolean eatChareWhile(Function<Chare, Boolean> predicate) {
 		if(atEndOfStringe() || !predicate.apply(peekChare())) {
@@ -251,6 +278,8 @@ public class StringeReader {
 	 * If a match is found, the reader consumes it.
 	 *
 	 * @param str The string to test for.
+	 *
+	 * @return True if the given string was present.
 	 */
 	public boolean eat(String str) {
 		if(str == null || str.isEmpty()) {
@@ -271,6 +300,8 @@ public class StringeReader {
 	 * If a match is found, the reader consumes it and any following matching strings.
 	 *
 	 * @param str The string to test for.
+	 *
+	 * @return True if the given string was present at least once.
 	 */
 	public boolean eatAll(String str) {
 		if(str == null || str.isEmpty()) {
@@ -293,6 +324,9 @@ public class StringeReader {
 	 * If a match is found, the reader consumes it.
 	 *
 	 * @param regex The regular expression to test for.
+	 *
+	 * @return True if the given regex matched.
+	 *
 	 * @throws IllegalArgumentException If the regex is null.
 	 */
 	public boolean eat(Pattern regex) throws IllegalArgumentException {
@@ -318,6 +352,9 @@ public class StringeReader {
 	 *
 	 * @param regex The regular expression to test for.
 	 * @param result The Stringe to output the result to.
+	 *
+	 * @return True if the given regex matched.
+	 *
 	 * @throws IllegalArgumentException If the regex is null.
 	 */
 	public boolean eat(Pattern regex, Stringe result) throws IllegalArgumentException {
@@ -342,6 +379,8 @@ public class StringeReader {
 	 * Indicates whether the specified character occurs at the reader's current position.
 	 *
 	 * @param c The character to test for.
+	 *
+	 * @return True if the given character is next.
 	 */
 	public boolean isNext(char c) {
 		return peekChar() == c;
@@ -351,6 +390,8 @@ public class StringeReader {
 	 * Indicates whether any of the specified characters occur at the reader's current position.
 	 *
 	 * @param cs The characters to test for.
+	 *
+	 * @return True if any of the given characters are next.
 	 */
 	public boolean isNext(char... cs) {
 		return !atEndOfStringe() && Util.contains(cs, stringe.charAt(pos));
@@ -360,6 +401,8 @@ public class StringeReader {
 	 * Indicates whether the specified string occurs at the reader's current position.
 	 *
 	 * @param str The string to test for.
+	 *
+	 * @return True if the given string is next.
 	 */
 	public boolean isNext(String str) {
 		return isNext(str, false);
@@ -370,6 +413,8 @@ public class StringeReader {
 	 *
 	 * @param str The string to test for.
 	 * @param ignoreCase Whether to ignore case considerations.
+	 *
+	 * @return True if the given string is next.
 	 */
 	public boolean isNext(String str, boolean ignoreCase) {
 		if(str == null || str.isEmpty()) {
@@ -387,6 +432,9 @@ public class StringeReader {
 	 * Indicates whether the specified regular expression matches the input at the reader's current position.
 	 *
 	 * @param regex The regular expression to test for.
+	 *
+	 * @return True if the given regex is next.
+	 *
 	 * @throws IllegalArgumentException If the regex is null.
 	 */
 	public boolean isNext(Pattern regex) throws IllegalArgumentException {
@@ -405,6 +453,9 @@ public class StringeReader {
 	 *
 	 * @param regex The regular expression to test for.
 	 * @param result The Stringe to output the result to.
+	 *
+	 * @return True if the given regex is next.
+	 *
 	 * @throws IllegalArgumentException If the regex is null.
 	 */
 	public boolean isNext(Pattern regex, Stringe result) throws IllegalArgumentException {
@@ -426,6 +477,8 @@ public class StringeReader {
 
 	/**
 	 * Advances the reader's position past any immediate white space.
+	 *
+	 * @return True if the reader advanced.
 	 */
 	public boolean skipWhitespace() {
 		int oldPos = pos;
@@ -441,6 +494,8 @@ public class StringeReader {
 	 * Indicates whether the specified character matches the input before the reader's current position.
 	 *
 	 * @param c The character to test for.
+	 *
+	 * @return True if the given character was last.
 	 */
 	public boolean wasLast(char c) {
 		return pos > 0 && stringe.charAt(pos - 1) == c;
@@ -450,6 +505,8 @@ public class StringeReader {
 	 * Indicates whether any of the specified characters match the input before the reader's current position.
 	 *
 	 * @param cs The characters to test for.
+	 *
+	 * @return True if any of the given characters were last.
 	 */
 	public boolean wasLast(char... cs) {
 		return pos > 0 && Util.contains(cs, stringe.charAt(pos - 1));
@@ -459,6 +516,8 @@ public class StringeReader {
 	 * Indicates whether the specified string matches the input before the reader's current position.
 	 *
 	 * @param str The string to test for.
+	 *
+	 * @return True if the given string was last.
 	 */
 	public boolean wasLast(String str) {
 		return wasLast(str, false);
@@ -469,6 +528,8 @@ public class StringeReader {
 	 *
 	 * @param str The string to test for.
 	 * @param ignoreCase Whether to ignore case considerations.
+	 *
+	 * @return True if the given string was last.
 	 */
 	public boolean wasLast(String str, boolean ignoreCase) {
 		if(str == null || str.isEmpty()) {
@@ -489,6 +550,9 @@ public class StringeReader {
 	 * @param <U> The token class to use.
 	 * @param rules The lexer to use.
 	 * @param tokenEmitter The callback that creates the returned token.
+	 *
+	 * @return The token that has been read.
+	 *
 	 * @throws IllegalArgumentException If the token emitter is null.
 	 * @throws IllegalStateException If the end of the Stringe is reached earlier than expected.
 	 * @throws UnsupportedOperationException If there is no undefined capture rule and an invalid token is found.
@@ -662,6 +726,8 @@ public class StringeReader {
 
 	/**
 	 * Returns the current zero-based position of the reader.
+	 *
+	 * @return The reader's current position.
 	 */
 	public int getPosition() {
 		return pos;
@@ -671,6 +737,7 @@ public class StringeReader {
 	 * Sets the position of the reader.
 	 *
 	 * @param newPos The new position of the reader.
+	 *
 	 * @throws StringIndexOutOfBoundsException If the new position is negative or greater than the stringe's length.
 	 */
 	public void setPosition(int newPos) throws StringIndexOutOfBoundsException {
@@ -683,6 +750,8 @@ public class StringeReader {
 
 	/**
 	 * Returns the total length, in characters, of the Stringe being read.
+	 *
+	 * @return The length of the Stringe being read.
 	 */
 	public int getLength() {
 		return stringe.length();

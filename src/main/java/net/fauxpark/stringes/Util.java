@@ -5,6 +5,8 @@ public class Util {
 	 * Calculates a hash code from the specified objects.
 	 *
 	 * @param objects The objects to hash.
+	 *
+	 * @return The hash code of the given objects.
 	 */
 	public static int hashOf(Object... objects) {
 		int hash = 0;
@@ -21,6 +23,8 @@ public class Util {
 	 *
 	 * @param parent The parent string to search.
 	 * @param sub The substring to look for.
+	 *
+	 * @return The number of occurrences of the given substring in the given parent string.
 	 */
 	public static int getMatchCount(String parent, String sub) {
 		if(parent == null || sub == null) {
@@ -50,10 +54,12 @@ public class Util {
 	}
 
 	/**
-	 * Determines whether the specified character is present in the given character array.
+	 * Determines whether the specified array contains the specified character.
 	 *
 	 * @param array The array to search.
 	 * @param key The character to look for.
+	 *
+	 * @return True if the given character is present in the given character array.
 	 */
 	public static boolean contains(final char[] array, final char key) {
 		for(final char c : array) {
@@ -66,10 +72,12 @@ public class Util {
 	}
 
 	/**
-	 * Determines whether the specified string is present in the given string array.
+	 * Determines whether the specified array contains the specified string.
 	 *
 	 * @param array The array to search.
 	 * @param key The string to look for.
+	 *
+	 * @return True if the given string is present in the given string array.
 	 */
 	public static boolean contains(final String[] array, final String key) {
 		for(final String str : array) {

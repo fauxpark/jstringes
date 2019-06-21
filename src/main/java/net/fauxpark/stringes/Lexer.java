@@ -81,7 +81,9 @@ public class Lexer<T> {
 	}
 
 	/**
-	 * Returns the list of token identifiers that should be ignored.
+	 * Returns the ignore rules.
+	 * 
+	 * @return A list of token identifiers that should be ignored.
 	 */
 	public HashSet<T> getIgnoreRules() {
 		return ignore;
@@ -104,6 +106,8 @@ public class Lexer<T> {
 	 * Returns an empty string if the identifier cannot be found.
 	 *
 	 * @param id The identifier to get the symbol for.
+	 *
+	 * @return A symbol representing the given token identifier.
 	 */
 	public String getSymbolForId(T id) {
 		List<ThreeTuple<String, T, Boolean>> listConcat = new ArrayList<>();
@@ -123,6 +127,8 @@ public class Lexer<T> {
 	 * Indicates whether the symbol is available in one of the constant rule lists.
 	 *
 	 * @param symbol The symbol to test for.
+	 *
+	 * @return True if the symbol is available.
 	 */
 	private boolean available(String symbol) {
 		List<ThreeTuple<String, T, Boolean>> listConcat = new ArrayList<>();
@@ -142,6 +148,7 @@ public class Lexer<T> {
 	 * Defines a lexer rule that returns a token when the end of the input is reached.
 	 *
 	 * @param id The token identifier to associate with the rule.
+	 *
 	 * @throws UnsupportedOperationException If called after after the context is used to create tokens.
 	 */
 	public void addEndToken(T id) throws UnsupportedOperationException {
@@ -157,7 +164,8 @@ public class Lexer<T> {
 	 *
 	 * @param id The token identifier to associate with the rule.
 	 * @param symbol The symbol to assign to the end token.
-	 * @throws IllegalArgumentException If the supplied identifer is null.
+	 *
+	 * @throws IllegalArgumentException If the supplied identifier is null.
 	 * @throws UnsupportedOperationException If called after the context is used to create tokens.
 	 */
 	public void addEndToken(T id, String symbol) throws IllegalArgumentException, UnsupportedOperationException {
@@ -177,6 +185,7 @@ public class Lexer<T> {
 	 *
 	 * @param id The token identifier to associate with the rule.
 	 * @param func A function that processes the captured Stringe.
+	 *
 	 * @throws UnsupportedOperationException If called after the context is used to create tokens.
 	 */
 	public void addUndefinedCaptureRule(T id, Function<Stringe, Stringe> func) throws UnsupportedOperationException {
@@ -192,6 +201,7 @@ public class Lexer<T> {
 	 *
 	 * @param symbol The symbol to test for.
 	 * @param id The token identifier to associate with the symbol.
+	 *
 	 * @throws UnsupportedOperationException If called after the context is used to create tokens, or a rule with the symbol already exists.
 	 * @throws IllegalArgumentException If the symbol is null or empty.
 	 */
@@ -205,6 +215,7 @@ public class Lexer<T> {
 	 * @param symbol The symbol to test for.
 	 * @param id The token identifier to associate with the symbol.
 	 * @param priority Whether the symbol should be tested before any regex rules.
+	 *
 	 * @throws UnsupportedOperationException If called after the context is used to create tokens, or a rule with the symbol already exists.
 	 * @throws IllegalArgumentException If the symbol is null or empty.
 	 */
@@ -230,6 +241,7 @@ public class Lexer<T> {
 	 *
 	 * @param symbols The symbols to test for.
 	 * @param id The token identifier to associate with the symbols.
+	 *
 	 * @throws UnsupportedOperationException If called after the context is used to create tokens, or a rule with the symbol already exists.
 	 * @throws IllegalArgumentException If the symbols array or any of its members are null or empty.
 	 */
@@ -243,6 +255,7 @@ public class Lexer<T> {
 	 * @param symbols The symbols to test for.
 	 * @param id The token identifier to associate with the symbols.
 	 * @param priority Whether the symbol should be tested before any regex rules.
+	 *
 	 * @throws UnsupportedOperationException If called after the context is used to create tokens, or a rule with the symbol already exists.
 	 * @throws IllegalArgumentException If the symbols array or any of its members are null or empty.
 	 */
@@ -275,6 +288,7 @@ public class Lexer<T> {
 	 * @param symbol The symbol to test for.
 	 * @param id The token identifier to associate with the symbol.
 	 * @param ignoreCase Whether the rule should ignore capitalization.
+	 *
 	 * @throws UnsupportedOperationException If called after the context is used to create tokens, or a rule with the symbol already exists.
 	 * @throws IllegalArgumentException If the symbol is null or empty.
 	 */
@@ -289,6 +303,7 @@ public class Lexer<T> {
 	 * @param id The token identifier to associate with the symbol.
 	 * @param ignoreCase Whether the rule should ignore capitalization.
 	 * @param priority Whether the symbol should be tested before any regex rules.
+	 *
 	 * @throws UnsupportedOperationException If called after the context is used to create tokens, or a rule with the symbol already exists.
 	 * @throws IllegalArgumentException If the symbol is null or empty.
 	 */
@@ -315,6 +330,7 @@ public class Lexer<T> {
 	 * @param symbols The symbols to test for.
 	 * @param id The token identifier to associate with the symbols.
 	 * @param ignoreCase Whether the rule should ignore capitalization.
+	 *
 	 * @throws UnsupportedOperationException If called after the context is used to create tokens, or a rule with the symbol already exists.
 	 * @throws IllegalArgumentException If the symbols array or any of its members are null or empty.
 	 */
@@ -329,6 +345,7 @@ public class Lexer<T> {
 	 * @param id The token identifier to associate with the symbols.
 	 * @param ignoreCase Whether the rule should ignore capitalization.
 	 * @param priority Whether the symbol should be tested before any regex rules.
+	 *
 	 * @throws UnsupportedOperationException If called after the context is used to create tokens, or a rule with the symbol already exists.
 	 * @throws IllegalArgumentException If the symbols array or any of its members are null or empty.
 	 */
@@ -360,6 +377,7 @@ public class Lexer<T> {
 	 *
 	 * @param regex The regex to test for.
 	 * @param id The token identifier to associate with the regex.
+	 *
 	 * @throws UnsupportedOperationException If called after the context is used to create tokens, or a rule with the same pattern already exists.
 	 * @throws IllegalArgumentException If the regex is null.
 	 */
@@ -373,6 +391,7 @@ public class Lexer<T> {
 	 * @param regex The regex to test for.
 	 * @param id The token identifier to associate with the regex.
 	 * @param priority The priority of the token. Higher values are checked first.
+	 *
 	 * @throws UnsupportedOperationException If called after the context is used to create tokens, or a rule with the same pattern already exists.
 	 * @throws IllegalArgumentException If the regex is null.
 	 */
@@ -399,6 +418,7 @@ public class Lexer<T> {
 	 *
 	 * @param regex The regex to test for.
 	 * @param generator A function that generates a token identifier from the match.
+	 *
 	 * @throws UnsupportedOperationException If called after the context is used to create tokens, or a rule with the same pattern already exists.
 	 * @throws IllegalArgumentException If either the regex or generator are null.
 	 */
@@ -412,6 +432,7 @@ public class Lexer<T> {
 	 * @param regex The regex to test for.
 	 * @param generator A function that generates a token identifier from the match.
 	 * @param priority The priority of the rule. Higher values are checked first.
+	 *
 	 * @throws UnsupportedOperationException If called after the context is used to create tokens, or a rule with the same pattern already exists.
 	 * @throws IllegalArgumentException If either the regex or generator are null.
 	 */
@@ -442,6 +463,7 @@ public class Lexer<T> {
 	 *
 	 * @param func The function to read the token with.
 	 * @param id The token identifier to associate with the function.
+	 *
 	 * @throws UnsupportedOperationException If called after the context is used to create tokens.
 	 * @throws IllegalArgumentException If the function is null.
 	 */
@@ -455,6 +477,7 @@ public class Lexer<T> {
 	 * @param func The function to read the token with.
 	 * @param id The token identifier to associate with the function.
 	 * @param priority The priority of the rule. Higher values are checked first.
+	 *
 	 * @throws UnsupportedOperationException If called after the context is used to create tokens.
 	 * @throws IllegalArgumentException If the function is null.
 	 */
@@ -474,6 +497,8 @@ public class Lexer<T> {
 	 * Tokenizes the input string and enumerates the resulting tokens.
 	 *
 	 * @param str The string to tokenize.
+	 *
+	 * @return An {@link Iterable} containing the tokens.
 	 */
 	public Iterable<Token<T>> tokenize(String str) {
 		return tokenize(new Stringe(str));
@@ -483,6 +508,8 @@ public class Lexer<T> {
 	 * Tokenizes the input Stringe and enumerates the resulting tokens.
 	 *
 	 * @param stre The Stringe to tokenize.
+	 *
+	 * @return An {@link Iterable} containing the tokens.
 	 */
 	public Iterable<Token<T>> tokenize(Stringe stre) {
 		StringeReader reader = new StringeReader(stre);
@@ -501,6 +528,9 @@ public class Lexer<T> {
 	 * @param <U> The type of token to be created.
 	 * @param stre The Stringe to tokenize.
 	 * @param tokenEmitter The function that will create the tokens.
+	 *
+	 * @return An {@link Iterable} containing the tokens.
+	 * 
 	 * @throws IllegalArgumentException If the token emitter is null.
 	 */
 	public <U> Iterable<U> tokenize(Stringe stre, BiFunction<Stringe, T, U> tokenEmitter) throws IllegalArgumentException {
@@ -522,6 +552,8 @@ public class Lexer<T> {
 	 * Determines if the lexer contains the specified punctuation mark.
 	 *
 	 * @param c The character to look for.
+	 *
+	 * @return True if the lexer's list of punctuation characters contains the given character.
 	 */
 	boolean hasPunctuation(int c) {
 		return c != -1 && punctuation.contains((char) c);
@@ -531,6 +563,8 @@ public class Lexer<T> {
 	 * Determines if the lexer contains the specified punctuation mark.
 	 *
 	 * @param c The character to look for.
+	 *
+	 * @return True if the lexer's list of punctuation characters contains the given character.
 	 */
 	boolean hasPunctuation(char c) {
 		return punctuation.contains(c);
@@ -557,6 +591,8 @@ public class Lexer<T> {
 
 	/**
 	 * Returns the rule for undefined symbols.
+	 *
+	 * @return A {@link TwoTuple} representing any undefined symbols.
 	 */
 	TwoTuple<Function<Stringe, Stringe>, T> getUndefinedCaptureRule() {
 		return undefToken;
@@ -564,6 +600,8 @@ public class Lexer<T> {
 
 	/**
 	 * Returns the rule for the end token symbol.
+	 *
+	 * @return A {@link TwoTuple} representing the end token.
 	 */
 	TwoTuple<String, T> getEndToken() {
 		return endToken;
@@ -571,6 +609,8 @@ public class Lexer<T> {
 
 	/**
 	 * Returns the list of normal priority symbol rules.
+	 *
+	 * @return A list of rules for normal priority symbols.
 	 */
 	List<ThreeTuple<String, T, Boolean>> getNormalSymbols() {
 		sort();
@@ -580,6 +620,8 @@ public class Lexer<T> {
 
 	/**
 	 * Returns the list of high priority symbol rules.
+	 *
+	 * @return A list of rules for high priority symbols.
 	 */
 	List<ThreeTuple<String, T, Boolean>> getHighSymbols() {
 		sort();
@@ -589,6 +631,8 @@ public class Lexer<T> {
 
 	/**
 	 * Returns the list of regex rules.
+	 *
+	 * @return A list of regular expression rules.
 	 */
 	List<ThreeTuple<Pattern, RuleMatchValueGenerator<T>, SymbolPriority>> getRegexes() {
 		sort();
@@ -598,6 +642,8 @@ public class Lexer<T> {
 
 	/**
 	 * Returns the list of function rules.
+	 *
+	 * @return A list of function rules.
 	 */
 	List<ThreeTuple<Function<StringeReader, Boolean>, T, SymbolPriority>> getFunctions() {
 		return functions;
@@ -654,9 +700,10 @@ public class Lexer<T> {
 
 		/**
 		 * Returns the token identifier.
-		 * If there is no constant value, returns the result of the function against the supplied MatchResult.
 		 *
 		 * @param m The regex match result to apply the generator to.
+		 *
+		 * @return The token identifier, or the result of the function against the supplied MatchResult if there is no constant value.
 		 */
 		public U getId(MatchResult m) {
 			return func == null ? id : func.apply(m);

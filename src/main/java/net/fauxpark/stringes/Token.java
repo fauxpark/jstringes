@@ -13,6 +13,8 @@ public final class Token<T> extends Stringe {
 
 	/**
 	 * Returns the token identifier.
+	 *
+	 * @return The identifier of the token.
 	 */
 	public T getId() {
 		return id;
@@ -42,6 +44,8 @@ public final class Token<T> extends Stringe {
 
 	/**
 	 * Returns a string representation of the current token.
+	 *
+	 * @return A string containing the value of the token, as well as its line and column numbers.
 	 */
 	@Override
 	public String toString() {
