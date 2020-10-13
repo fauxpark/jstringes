@@ -1,6 +1,6 @@
 JStringes
 =========
-[![Build Status](https://travis-ci.org/fauxpark/jstringes.svg)](https://travis-ci.org/fauxpark/jstringes)
+[![CI status](https://github.com/fauxpark/jstringes/workflows/CI/badge.svg)](https://github.com/fauxpark/jstringes/actions)
 
 ## What is a *stringe*?!
 
